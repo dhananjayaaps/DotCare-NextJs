@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Sidemenu from '../../components/sidemenu';
 import NavBar from '@/app/components/NavBar';
 import { Button } from '@nextui-org/react';
+import AddUserDialog from './AddUserDialog';
 
 export default function Admin() {
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -140,48 +141,9 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
       )}
 
       {showAddDialog && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-black bg-opacity-50 absolute inset-0" onClick={() => setShowAddDialog(false)}></div>
-          <div className="bg-white p-6 rounded-lg z-10">
-            <p className="mb-4 text-black">Enter the username of the admin.</p>
-            <form>
-              <div className="mb-4 flex items-center">
-                <input
-                  type="text"
-                  className="border border-gray-300 p-2 rounded-l w-full"
-                  placeholder="Username"
-                />
-                <button
-                  type="button"
-                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded-r"
-                  onClick={() => {
-                    // Check username logic here
-                  }}
-                >
-                  Check
-                </button>
-              </div>
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2"
-                  onClick={() => setShowAddDialog(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded"
-                  onClick={() => {
-                    // Add user logic here
-                    setShowAddDialog(false);
-                  }}
-                >
-                  Add
-                </button>
-              </div>
-            </form>
-          </div>
+        <div>
+        <h1>hello</h1>
+        <AddUserDialog showAddDialog={showAddDialog} setShowAddDialog={setShowAddDialog} />
         </div>
       )}
 
