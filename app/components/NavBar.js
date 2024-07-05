@@ -5,7 +5,7 @@ import {SearchIcon} from "./SearchIcon.jsx";
 
 export default function NavBar() {
   return (
-    <Navbar isBordered className="p-5 bg-white">
+    <Navbar isBordered className="p-5 bg-white z-10">
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
           {/* <AcmeLogo /> */}
