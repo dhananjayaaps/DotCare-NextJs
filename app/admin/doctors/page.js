@@ -5,14 +5,14 @@ import NavBar from '@/app/components/NavBar';
 import { Button } from '@nextui-org/react';
 import AddUserDialog from './AddUserDialog';
 
-export default function Admin() {
+export default function Doctor() {
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   return (
     <div className="flex flex-col w-full h-screen bg-white text-black">
       <NavBar />
       <div className="flex flex-row w-full h-screen bg-white">
-        <Sidemenu highlightedItem={'Admin'}/>
+        <Sidemenu highlightedItem={'Doctor'}/>
         <div className="flex-1 flex-col overflow-auto p-6">
           <div className="flex-1 overflow-auto p-4">
             <Button
@@ -20,7 +20,7 @@ export default function Admin() {
               className="bg-blue-600 ml-3 rounded-lg text-white"
               onClick={() => setShowAddDialog(true)}
             >
-              Add a new Admin
+              Add a new Doctor
             </Button>
           </div>
           <div className="flex-1 overflow-auto p-6">
@@ -36,7 +36,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [currentAction, setCurrentAction] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
-  const [newAdminName, setNewAdminName] = useState('');
+  const [newDoctorName, setNewDoctorName] = useState('');
 
   const handleActionClick = (action, user) => {
     setCurrentAction(action);
