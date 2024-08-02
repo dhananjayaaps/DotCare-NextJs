@@ -16,25 +16,19 @@ export default function mother() {
   };
 
   return (
-    <div className="flex flex-col w-full h-screen bg-white text-black">
-      <NavBar />
-      <div className="flex flex-row w-full h-screen bg-white">
-        <Sidemenu highlightedItem={'mother'}/>
-        <div className="flex-1 flex-col overflow-auto p-6">
-          <div className="flex-1 overflow-auto p-4">
-              <Button
-                color="primary"
-                className="bg-blue-600 ml-3 rounded-lg text-white"
-                onClick={() => setShowAddDialog(true)}
-              >
-                Create a new appointment
-              </Button>
-            </div>
-          <div className="flex-1 overflow-auto p-6">
-            <Table setShowAddDialog={setShowAddDialog} showAddDialog={showAddDialog} />
-          </div>
+    <div className="flex-1 flex-col overflow-auto p-6">
+        <div className="flex-1 overflow-auto p-4">
+            <Button
+            color="primary"
+            className="bg-blue-600 ml-3 rounded-lg text-white"
+            onClick={() => setShowAddDialog(true)}
+            >
+            Create a new appointment
+            </Button>
         </div>
-      </div>
+        <div className="flex-1 overflow-auto p-6">
+        <Table setShowAddDialog={setShowAddDialog} showAddDialog={showAddDialog} />
+        </div>
     </div>
   );
 }

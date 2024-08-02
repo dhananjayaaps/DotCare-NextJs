@@ -20,15 +20,8 @@ export default function Mother() {
   };
 
   return (
-    <div className="flex flex-col w-full h-screen bg-white text-black">
-      <NavBar />
-      <div className="flex flex-row w-full h-screen bg-white">
-        <Sidemenu highlightedItem={'mother'} />
-        <div className="flex-1 flex-col overflow-auto p-6">
-          <RegForm />
-          
-        </div>
-      </div>
+    <div className="flex-1 flex-col overflow-auto p-6">
+      <RegForm />
     </div>
-  );
+);
 }
