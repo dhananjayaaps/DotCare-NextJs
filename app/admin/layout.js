@@ -1,7 +1,7 @@
 'use client';
 import { Inter } from "next/font/google";
 import NavBar from '@/app/components/NavBar';
-import Sidemenu from '../components/sidemenu';
+import Sidemenu from './sidemenu';
 import { useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });

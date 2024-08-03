@@ -77,7 +77,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
         <tbody className="divide-y divide-gray-200">
           <tr>
             <td className="px-6 py-4 whitespace-no-wrap">
-              <p className="text-sm leading-5 text-gray-900">John Doe</p>
+              <p className="text-sm leading-5 text-gray-900">Samanthi Perera</p>
             </td>
             <td className="px-6 py-4 whitespace-no-wrap">
               <p className="text-sm leading-5 text-gray-900">2103456756</p>
@@ -107,7 +107,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
           </tr>
           <tr>
             <td className="px-6 py-4 whitespace-no-wrap">
-              <p className="text-sm leading-5 text-gray-900">Amal Kumara</p>
+              <p className="text-sm leading-5 text-gray-900">Nimali Dassanayake</p>
             </td>
             <td className="px-6 py-4 whitespace-no-wrap">
               <p className="text-sm leading-5 text-gray-900">2100056756</p>
@@ -137,7 +137,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
           </tr>
           <tr>
             <td className="px-6 py-4 whitespace-no-wrap">
-              <p className="text-sm leading-5 text-gray-900">Nimal Sampath</p>
+              <p className="text-sm leading-5 text-gray-900">Wasana Perera</p>
             </td>
             <td className="px-6 py-4 whitespace-no-wrap">
               <p className="text-sm leading-5 text-gray-900">2100056789</p>
