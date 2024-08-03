@@ -4,7 +4,6 @@ import Sidemenu from '../../components/sidemenu';
 import NavBar from '@/app/components/NavBar';
 import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/react';
-import AddAppointmentDialog from './AddAppointmentDialog';
 
 export default function mother() {
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -18,13 +17,13 @@ export default function mother() {
   return (
     <div className="flex-1 flex-col overflow-auto p-6">
         <div className="flex-1 overflow-auto p-4">
-            <Button
+        <Button
             color="primary"
             className="bg-blue-600 ml-3 rounded-lg text-white"
-            onClick={() => setShowAddDialog(true)}
-            >
-            Create a new appointment
-            </Button>
+            onClick={handleNavigation}
+        >
+            Add a new mother
+        </Button>
         </div>
         <div className="flex-1 overflow-auto p-6">
         <Table setShowAddDialog={setShowAddDialog} showAddDialog={showAddDialog} />
@@ -101,12 +100,6 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 light:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 light:bg-gray-700 light:text-gray-400">
             <tr>
-                <th scope="col" class="p-4">
-                    <div class="flex items-center">
-                        <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 light:focus:ring-blue-600 light:ring-offset-gray-800 light:focus:ring-offset-gray-800 focus:ring-2 light:bg-gray-700 light:border-gray-600" />
-                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
-                    </div>
-                </th>
                 <th scope="col" class="px-6 py-3">Name</th>
                 <th scope="col" class="px-6 py-3">Contact</th>
                 <th scope="col" class="px-6 py-3">Delivery Date</th>
@@ -116,23 +109,19 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
         </thead>
         <tbody>
             <tr class="bg-white border-b light:bg-gray-800 light:border-gray-700 hover:bg-gray-50 light:hover:bg-gray-600">
-                <td class="w-4 p-4">
-                    <div class="flex items-center">
-                        <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 light:focus:ring-blue-600 light:ring-offset-gray-800 light:focus:ring-offset-gray-800 focus:ring-2 light:bg-gray-700 light:border-gray-600" />
-                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                    </div>
-                </td>
+                
                 <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap light:text-white">
-                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="John Doe image"/>
+                    <a href='/midwife/mother' class="flex items-center"><img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="John Doe image"/>
                     <div class="ps-3">
-                        <div class="text-base font-semibold">John Doe</div>
+                        <div class="text-base font-semibold">Sapuni Muthunika</div>
                         <div class="font-normal text-gray-500">2103456756</div>
                     </div>
+                    </a>
                 </th>
                 <td class="px-6 py-4">0713073456</td>
                 <td class="px-6 py-4">
                     <div class="flex items-center">
-                        2024-09-18
+                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Active
                     </div>
                 </td>
                 <td class="px-6 py-4">2023-08-21</td>
@@ -142,23 +131,18 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                 </td>
             </tr>
             <tr class="bg-white border-b light:bg-gray-800 light:border-gray-700 hover:bg-gray-50 light:hover:bg-gray-600">
-                <td class="w-4 p-4">
-                    <div class="flex items-center">
-                        <input id="checkbox-table-search-2" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 light:focus:ring-blue-600 light:ring-offset-gray-800 light:focus:ring-offset-gray-800 focus:ring-2 light:bg-gray-700 light:border-gray-600" />
-                        <label for="checkbox-table-search-2" class="sr-only">checkbox</label>
-                    </div>
-                </td>
+        
                 <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap light:text-white">
                     <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Amal Kumara image" />
                     <div class="ps-3">
-                        <div class="text-base font-semibold">Amal Kumara</div>
+                        <div class="text-base font-semibold">Bhagya Dilini</div>
                         <div class="font-normal text-gray-500">2100056756</div>
                     </div>
                 </th>
                 <td class="px-6 py-4">0713074556</td>
                 <td class="px-6 py-4">
                     <div class="flex items-center">
-                        2024-09-18
+                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Active
                     </div>
                 </td>
                 <td class="px-6 py-4">2023-09-15</td>
@@ -168,12 +152,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                 </td>
             </tr>
             <tr class="bg-white light:bg-gray-800 hover:bg-gray-50 light:hover:bg-gray-600">
-                <td class="w-4 p-4">
-                    <div class="flex items-center">
-                        <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 light:focus:ring-blue-600 light:ring-offset-gray-800 light:focus:ring-offset-gray-800 focus:ring-2 light:bg-gray-700 light:border-gray-600" />
-                        <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
-                    </div>
-                </td>
+                
                 <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap light:text-white">
                     <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Samantha Perera image" />
                     <div class="ps-3">
@@ -184,7 +163,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                 <td class="px-6 py-4">0713087456</td>
                 <td class="px-6 py-4">
                     <div class="flex items-center">
-                        2024-09-18
+                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Active
                     </div>
                 </td>
                 <td class="px-6 py-4">2023-10-10</td>
@@ -223,12 +202,6 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
             </li>
         </ul>
     </nav>
-
-    {showAddDialog && (
-        <div>
-        <AddAppointmentDialog showAddDialog={showAddDialog} setShowAddDialog={setShowAddDialog} />
-        </div>
-      )}
 
   </div>
   

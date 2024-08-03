@@ -4,11 +4,12 @@ import Sidemenu from '../../components/sidemenu';
 import NavBar from '@/app/components/NavBar';
 import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/react';
-import AddAppointmentDialog from './AddAppointmentDialog';
+import UserRegistrations from './userregistrations';
+import AppointmentChart from './appointmentsChart';
+import Calender from './calender';
 
-export default function mother() {
+export default function Dashboard() {
   const [showAddDialog, setShowAddDialog] = useState(false);
-
   const router = useRouter();
 
   const handleNavigation = () => {
@@ -17,21 +18,37 @@ export default function mother() {
 
   return (
     <div className="flex-1 flex-col overflow-auto p-6">
-        <div className="flex-1 overflow-auto p-4">
-            <Button
-            color="primary"
-            className="bg-blue-600 ml-3 rounded-lg text-white"
-            onClick={() => setShowAddDialog(true)}
-            >
-            Create a new appointment
-            </Button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+        <UserRegistrations />
+        <AppointmentChart />
+        <div className="flex items-center justify-center h-24 rounded">
+            {/* <p className="text-2xl text-gray-400 dark:text-gray-500"> */}
+            {/* </p> */}
         </div>
-        <div className="flex-1 overflow-auto p-6">
-        <Table setShowAddDialog={setShowAddDialog} showAddDialog={showAddDialog} />
+        
+        <Calender />
+        <div className="flex items-center justify-center h-24 rounded">
+            <p className="text-2xl text-gray-400 dark:text-gray-500">
+            <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
+            </svg>
+            </p>
+        </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="flex items-center justify-center h-28 rounded ">
+            <p className="text-2xl text-gray-400 dark:text-gray-500">
+            <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
+            </svg>
+            </p>
+        </div>
+        {/* Repeat for other items */}
         </div>
     </div>
   );
 }
+
 
 const Table = ({ setShowAddDialog, showAddDialog }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -132,7 +149,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                 <td class="px-6 py-4">0713073456</td>
                 <td class="px-6 py-4">
                     <div class="flex items-center">
-                        2024-09-18
+                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Active
                     </div>
                 </td>
                 <td class="px-6 py-4">2023-08-21</td>
@@ -158,7 +175,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                 <td class="px-6 py-4">0713074556</td>
                 <td class="px-6 py-4">
                     <div class="flex items-center">
-                        2024-09-18
+                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Active
                     </div>
                 </td>
                 <td class="px-6 py-4">2023-09-15</td>
@@ -184,7 +201,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                 <td class="px-6 py-4">0713087456</td>
                 <td class="px-6 py-4">
                     <div class="flex items-center">
-                        2024-09-18
+                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Active
                     </div>
                 </td>
                 <td class="px-6 py-4">2023-10-10</td>

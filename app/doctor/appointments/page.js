@@ -17,15 +17,7 @@ export default function mother() {
 
   return (
     <div className="flex-1 flex-col overflow-auto p-6">
-        <div className="flex-1 overflow-auto p-4">
-            <Button
-            color="primary"
-            className="bg-blue-600 ml-3 rounded-lg text-white"
-            onClick={() => setShowAddDialog(true)}
-            >
-            Create a new appointment
-            </Button>
-        </div>
+        
         <div className="flex-1 overflow-auto p-6">
         <Table setShowAddDialog={setShowAddDialog} showAddDialog={showAddDialog} />
         </div>
@@ -111,7 +103,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                 <th scope="col" class="px-6 py-3">Contact</th>
                 <th scope="col" class="px-6 py-3">Delivery Date</th>
                 <th scope="col" class="px-6 py-3">Next clinic date</th>
-                <th scope="col" class="px-6 py-3">Actions</th>
+                {/* <th scope="col" class="px-6 py-3">Actions</th> */}
             </tr>
         </thead>
         <tbody>
@@ -132,14 +124,10 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                 <td class="px-6 py-4">0713073456</td>
                 <td class="px-6 py-4">
                     <div class="flex items-center">
-                        2024-09-18
+                    2024-08-21
                     </div>
                 </td>
                 <td class="px-6 py-4">2023-08-21</td>
-                <td class="px-6 py-4">
-                    <button class="bg-yellow-500 text-white px-3 py-1 rounded mr-2" onClick={() => handleActionClick('restricted', { name: 'John Doe' })}>Restrict</button>
-                    <button class="bg-red-500 text-white px-3 py-1 rounded" onClick={() => handleActionClick('removed', { name: 'John Doe' })}>Remove</button>
-                </td>
             </tr>
             <tr class="bg-white border-b light:bg-gray-800 light:border-gray-700 hover:bg-gray-50 light:hover:bg-gray-600">
                 <td class="w-4 p-4">
@@ -158,14 +146,10 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                 <td class="px-6 py-4">0713074556</td>
                 <td class="px-6 py-4">
                     <div class="flex items-center">
-                        2024-09-18
+                    2024-08-21
                     </div>
                 </td>
                 <td class="px-6 py-4">2023-09-15</td>
-                <td class="px-6 py-4">
-                    <button class="bg-yellow-500 text-white px-3 py-1 rounded mr-2" onClick={() => handleActionClick('restricted', { name: 'Amal Kumara' })}>Restrict</button>
-                    <button class="bg-red-500 text-white px-3 py-1 rounded" onClick={() => handleActionClick('removed', { name: 'Amal Kumara' })}>Remove</button>
-                </td>
             </tr>
             <tr class="bg-white light:bg-gray-800 hover:bg-gray-50 light:hover:bg-gray-600">
                 <td class="w-4 p-4">
@@ -184,14 +168,10 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                 <td class="px-6 py-4">0713087456</td>
                 <td class="px-6 py-4">
                     <div class="flex items-center">
-                        2024-09-18
+                    2024-08-21
                     </div>
                 </td>
                 <td class="px-6 py-4">2023-10-10</td>
-                <td class="px-6 py-4">
-                    <button class="bg-yellow-500 text-white px-3 py-1 rounded mr-2" onClick={() => handleActionClick('restricted', { name: 'Samantha Perera' })}>Restrict</button>
-                    <button class="bg-red-500 text-white px-3 py-1 rounded" onClick={() => handleActionClick('removed', { name: 'Samantha Perera' })}>Remove</button>
-                </td>
             </tr>
         </tbody>
     </table>
