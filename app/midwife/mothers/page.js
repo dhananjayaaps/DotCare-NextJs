@@ -111,11 +111,12 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
             <tr class="bg-white border-b light:bg-gray-800 light:border-gray-700 hover:bg-gray-50 light:hover:bg-gray-600">
                 
                 <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap light:text-white">
-                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="John Doe image"/>
+                    <a href='/midwife/mother' class="flex items-center"><img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="John Doe image"/>
                     <div class="ps-3">
-                        <div class="text-base font-semibold">John Doe</div>
+                        <div class="text-base font-semibold">Sapuni Muthunika</div>
                         <div class="font-normal text-gray-500">2103456756</div>
                     </div>
+                    </a>
                 </th>
                 <td class="px-6 py-4">0713073456</td>
                 <td class="px-6 py-4">
@@ -134,7 +135,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                 <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap light:text-white">
                     <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Amal Kumara image" />
                     <div class="ps-3">
-                        <div class="text-base font-semibold">Amal Kumara</div>
+                        <div class="text-base font-semibold">Bhagya Dilini</div>
                         <div class="font-normal text-gray-500">2100056756</div>
                     </div>
                 </th>

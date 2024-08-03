@@ -131,7 +131,7 @@ const AppointmentChart = () => {
           </div>
           <div>
             <h5 className="leading-none text-2xl font-bold text-gray-900 light:text-white pb-1">251</h5>
-            <p className="text-sm font-normal text-gray-500 light:text-gray-400">Mother Registrations</p>
+            <p className="text-sm font-normal text-gray-500 light:text-gray-400">Scheduled Appointments</p>
           </div>
         </div>
         <div>

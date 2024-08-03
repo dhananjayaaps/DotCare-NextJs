@@ -9,22 +9,22 @@ export default function NavBar() {
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
           {/* <AcmeLogo /> */}
-          <p className="hidden sm:block font-bold text-inherit">ACME</p>
+          <p className="hidden sm:block font-bold text-inherit">DotCare</p>
         </NavbarBrand>
         <NavbarContent className="hidden sm:flex gap-3">
           <NavbarItem>
             <Link color="foreground" href="#">
-              Features
+              Home
             </Link>
           </NavbarItem>
           <NavbarItem isActive>
             <Link href="#" aria-current="page" color="secondary">
-              Customers
+              News
             </Link>
           </NavbarItem>
           <NavbarItem>
             <Link color="foreground" href="#">
-              Integrations
+              Contact Us
             </Link>
           </NavbarItem>
         </NavbarContent>

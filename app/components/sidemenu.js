@@ -162,9 +162,9 @@ const Sidemenu = ({ highlightedItem }) => {
 
             <div>
               <p className="text-xs">
-                <strong className="block font-medium">Eric Frusciante</strong>
+                <strong className="block font-medium">Thenu</strong>
 
-                <span> eric@frusciante.com </span>
+                <span> Thenu@frusciante.com </span>
               </p>
             </div>
           </a>
