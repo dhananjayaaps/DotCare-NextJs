@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-const AddUserDialog = ({ showAddDialog, setShowAddDialog }) => {
-const [userData, setUserData] = useState(null);
+const AddMotherDialog = ({ showAddDialog, setShowAddDialog }) => {
+  const [userData, setUserData] = useState(null);
 
   const handleCheckUser = () => {
     // Dummy data for demonstration
@@ -96,4 +96,4 @@ const [userData, setUserData] = useState(null);
   );
 };
 
-export default AddUserDialog;
+export default AddMotherDialog;

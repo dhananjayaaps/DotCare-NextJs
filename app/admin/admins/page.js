@@ -22,6 +22,7 @@ export default function Admin() {
       <div className="flex-1 overflow-auto p-6">
         <Table setShowAddDialog={setShowAddDialog} showAddDialog={showAddDialog} />
       </div>
+      <ToastContainer /> 
     </div>
   );
 }
