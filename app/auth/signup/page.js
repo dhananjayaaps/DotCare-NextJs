@@ -1,8 +1,5 @@
 'use client'
 import React, { useState } from 'react';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -38,12 +35,11 @@ export default function SignUp() {
 
       if (response.ok) {
         const data = await response.json();
-        toast("Wow so easy!")
         alert('Account created successfully');
         console.log(data);
       } else {
         const errorData = await response.json();
-        toast("Wow so easy!", error)
+        console.log(errorData)
         alert('Failed to create account: ' + errorData.message);
       }
     } catch (error) {
@@ -54,7 +50,6 @@ export default function SignUp() {
 
   return (
     <div>
-      <ToastContainer />
       <section className="bg-white">
         <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
           <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
@@ -245,7 +240,7 @@ export default function SignUp() {
 
                   <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                     Already have an account?
-                    <a href="#" className="text-gray-700 underline">
+                    <a href="/auth/login" className="text-gray-700 underline">
                       Log in
                     </a>
                     .
