@@ -1,16 +1,69 @@
 import { useState } from 'react';
+import axios from 'axios';
 
 const AddUserDialog = ({ showAddDialog, setShowAddDialog }) => {
-const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [formData, setFormData] = useState({ username: '' , role: ''});
 
-  const handleCheckUser = () => {
-    // Dummy data for demonstration
-    const dummyData = {
-      name: "John Doe",
-      nic: "123456789V",
-      email: "john.doe@example.com",
-    };
-    setUserData(dummyData);
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value,
+    });
+  };
+
+  const handleCheckUser = async () => {
+    try {
+      setUserData(null);
+      const response = await axios.get('http://localhost:8080/roles/check', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        params: formData,
+        withCredentials: true, 
+      });
+      if (response.status === 200) {
+        setUserData(response.data.data);
+      } else {
+        alert('Failed to fetch user data');
+      }
+    } catch (error) {
+      alert('Failed to fetch user data');
+      console.error('Error checking username:', error);
+    }
+  };
+
+  const handleAddRole = async () => {
+    try {
+      formData.role = 'admin'
+      console.log(formData)
+
+      const response =  await fetch('http://localhost:8080/roles/addRole', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+        credentials: 'include',
+      });
+
+      if (response.status === 200) {
+        alert('Role added succesfully')
+        setUserData({});
+      } else {
+        alert('Failed to add role');
+      }
+    } catch (error) {
+      console.error('Error adding role:', error);
+    }
+  };
+  
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Add user logic here
+    setShowAddDialog(false);
   };
 
   return (
@@ -23,12 +76,15 @@ const [userData, setUserData] = useState(null);
           ></div>
           <div className="bg-white p-6 rounded-lg z-10">
             <p className="mb-4 text-black">Add user dialog content here.</p>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="mb-4 flex items-center">
                 <input
                   type="text"
+                  name="username" // Added name attribute
                   className="border border-gray-300 p-2 rounded-l w-full"
                   placeholder="Username"
+                  value={formData.username}
+                  onChange={handleInputChange}
                 />
                 <button
                   type="button"
@@ -44,7 +100,7 @@ const [userData, setUserData] = useState(null);
                     <label className="block text-gray-700">Name</label>
                     <input
                       type="text"
-                      value={userData.name}
+                      value={userData.name || ''}
                       className="border border-gray-300 p-2 rounded w-full"
                       readOnly
                     />
@@ -53,7 +109,7 @@ const [userData, setUserData] = useState(null);
                     <label className="block text-gray-700">NIC</label>
                     <input
                       type="text"
-                      value={userData.nic}
+                      value={userData.nic || ''}
                       className="border border-gray-300 p-2 rounded w-full"
                       readOnly
                     />
@@ -62,7 +118,7 @@ const [userData, setUserData] = useState(null);
                     <label className="block text-gray-700">Email</label>
                     <input
                       type="text"
-                      value={userData.email}
+                      value={userData.email || ''}
                       className="border border-gray-300 p-2 rounded w-full"
                       readOnly
                     />
@@ -80,10 +136,7 @@ const [userData, setUserData] = useState(null);
                 <button
                   type="submit"
                   className="bg-blue-500 text-white px-4 py-2 rounded"
-                  onClick={() => {
-                    // Add user logic here
-                    setShowAddDialog(false);
-                  }}
+                  onClick={handleAddRole}
                 >
                   Add
                 </button>

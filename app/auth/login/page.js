@@ -24,7 +24,7 @@ export default function LogIn() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-        credentials: 'include', // Include credentials (cookies)
+        credentials: 'include',
       });
   
       if (response.ok) {

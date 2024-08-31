@@ -36,7 +36,7 @@ const AddUserDialog = ({ showAddDialog, setShowAddDialog }) => {
 
   const handleAddRole = async () => {
     try {
-      formData.role = 'doctor'
+      formData.role = 'Moh'
       console.log(formData)
 
       const response =  await fetch('http://localhost:8080/roles/addRole', {

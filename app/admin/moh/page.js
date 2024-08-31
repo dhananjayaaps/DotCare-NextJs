@@ -1,9 +1,12 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import AddUserDialog from './AddUserDialog';
+import Sidemenu from '../../components/sidemenu';
+import NavBar from '@/app/components/NavBar';
 import { Button } from '@nextui-org/react';
+import AddUserDialog from './AddUserDialog';
+import axios from 'axios';
 
-export default function Doctor() {
+export default function MOH() {
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   return (
@@ -14,7 +17,7 @@ export default function Doctor() {
           className="bg-blue-600 ml-3 rounded-lg text-white"
           onClick={() => setShowAddDialog(true)}
         >
-          Add a new Doctor
+          Add a new MOH
         </Button>
       </div>
       <div className="flex-1 overflow-auto p-6">
@@ -34,7 +37,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     // Fetch data from the API
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/roles/byrole?role=doctor', {
+        const response = await fetch('http://localhost:8080/roles/byrole?role=MOH', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
