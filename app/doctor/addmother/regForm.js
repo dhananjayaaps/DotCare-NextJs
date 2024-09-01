@@ -21,7 +21,7 @@ export default function RegForm() {
     // Fetch list of doctors from API
     const fetchDoctors = async () => {
       try {
-        const response = await fetch('http://localhost:8080/doctordates/doctors', {
+        const response = await fetch('http://localhost:8080/roles/byrole?role=moh', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export default function RegForm() {
           throw new Error('Failed to fetch doctors');
         }
         const data = await response.json();
-        setDoctors(data); // Assuming the response contains a "doctors" array
+        setDoctors(data.data); // Assuming the response contains a "doctors" array
       } catch (error) {
         console.error('Error fetching doctors:', error);
       }
@@ -411,7 +411,7 @@ export default function RegForm() {
                 <option value="">Select a Doctor</option>
                 {doctors.map((doctor) => (
                   <option key={doctor.id} value={doctor.id}>
-                    {doctor.doctorName}
+                    {doctor.first_name} {doctor.last_name}
                   </option>
                 ))}
               </select>
@@ -425,8 +425,6 @@ export default function RegForm() {
                   selected={selectedDate}
                   onSelect={setSelectedDate}
                   filterDate={isWeekday}
-      //             selected={selected}
-      // onSelect={setSelected}
                   disabledDays={{ 
                     daysOfWeek: [0, 1, 2, 3, 4, 5, 6].filter(day => !isDateSelectable(new Date().setDate(day))) // Disable days that are not selectable
                   }}
