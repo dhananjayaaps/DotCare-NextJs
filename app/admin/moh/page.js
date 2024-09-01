@@ -4,9 +4,8 @@ import Sidemenu from '../../components/sidemenu';
 import NavBar from '@/app/components/NavBar';
 import { Button } from '@nextui-org/react';
 import AddUserDialog from './AddUserDialog';
-import axios from 'axios';
 
-export default function MOH() {
+export default function Moh() {
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   return (
@@ -17,7 +16,7 @@ export default function MOH() {
           className="bg-blue-600 ml-3 rounded-lg text-white"
           onClick={() => setShowAddDialog(true)}
         >
-          Add a new MOH
+          Add a new Moh
         </Button>
       </div>
       <div className="flex-1 overflow-auto p-6">
@@ -37,7 +36,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     // Fetch data from the API
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/roles/byrole?role=MOH', {
+        const response = await fetch('http://localhost:8080/roles/byrole?role=Moh', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -63,18 +62,43 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     fetchData();
   }, []);
 
-  const handleActionClick = (action, user) => {
-    setCurrentAction(action);
+  const handleDelete = (user) => {
     setCurrentUser(user);
+    console.log(user);
     setShowPopup(true);
   };
 
-  const handleConfirm = () => {
+  const handleConfirmDelete = () => {
     // Perform the action (e.g., restrict or remove user)
-    console.log(`User ${currentUser.first_name} ${currentUser.last_name} will be ${currentAction}`);
+    // console.log(`User ${currentUser.first_name} ${currentUser.last_name} will be ${currentAction}`);
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/roles/deleteRole', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({username: currentUser.username, role: 'moh'}),
+        });
+        console.log(response);
+  
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+  
+        const result = await response.json();
+        if (result.success) {
+          console.log("Successfull removed role from " + currentUser.username);
+        }
+      } catch (error) {
+        console.error('Error Delete Data:', error);
+      }
+    };
+  
+    fetchData();
     setShowPopup(false);
     setCurrentUser(null);
-    setCurrentAction('');
   };
 
   const handleCancel = () => {
@@ -120,14 +144,8 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
               </td>
               <td className="px-6 py-4 whitespace-no-wrap">
                 <button
-                  className="bg-yellow-500 text-white px-3 py-1 rounded mr-2"
-                  onClick={() => handleActionClick('restricted', user)}
-                >
-                  Restrict
-                </button>
-                <button
                   className="bg-red-500 text-white px-3 py-1 rounded"
-                  onClick={() => handleActionClick('removed', user)}
+                  onClick={() => handleDelete(user)}
                 >
                   Remove
                 </button>
@@ -148,7 +166,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
               <button className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2" onClick={handleCancel}>
                 Cancel
               </button>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleConfirm}>
+              <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleConfirmDelete}>
                 Confirm
               </button>
             </div>
