@@ -1,12 +1,12 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidemenu from '../../components/sidemenu';
 import NavBar from '@/app/components/NavBar';
 import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/react';
 import AddAppointmentDialog from './AddAppointmentDialog';
 
-export default function mother() {
+export default function Mother() {
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   const router = useRouter();
@@ -17,200 +17,199 @@ export default function mother() {
 
   return (
     <div className="flex-1 flex-col overflow-auto p-6">
-        
-        <div className="flex-1 overflow-auto p-6">
+      <div className="flex-1 overflow-auto p-6">
         <Table setShowAddDialog={setShowAddDialog} showAddDialog={showAddDialog} />
-        </div>
+      </div>
     </div>
   );
 }
 
 const Table = ({ setShowAddDialog, showAddDialog }) => {
-  const [showPopup, setShowPopup] = useState(false);
-  const [currentAction, setCurrentAction] = useState('');
-  const [currentUser, setCurrentUser] = useState(null);
-  const [newmotherName, setNewmotherName] = useState('');
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showRiskFactorsDialog, setShowRiskFactorsDialog] = useState(false);
+  const [riskFactors, setRiskFactors] = useState([]);
+  const [motherDetails, setMotherDetails] = useState(null); // New state to store mother's details
+  const [riskLoading, setRiskLoading] = useState(false);
+  const [selectedRefferelId, setSelectedRefferelId] = useState('');
 
-  const handleActionClick = (action, user) => {
-    setCurrentAction(action);
-    setCurrentUser(user);
-    setShowPopup(true);
-  };
-
-  const handleConfirm = () => {
-    // Perform the action (e.g., restrict or remove user)
-    console.log(`User ${currentUser.name} will be ${currentAction}`);
-    setShowPopup(false);
-    setCurrentUser(null);
-    setCurrentAction('');
+  const handleShowButton = (id) => {
+    setSelectedRefferelId(id);
+    setShowRiskFactorsDialog(true);
+    fetchRiskFactors(id);
   };
 
   const handleCancel = () => {
-    setShowPopup(false);
-    setCurrentUser(null);
-    setCurrentAction('');
+    setShowRiskFactorsDialog(false);
+    setRiskFactors([]);
+    setMotherDetails(null); // Reset mother's details on close
   };
 
+  const fetchRiskFactors = async (id) => {
+    setRiskLoading(true);
+    try {
+      const response = await fetch(`http://localhost:8080/referrals/getRFandMomById?id=${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+      setRiskFactors(data.riskFactors.reverse());
+      setMotherDetails(data.referralDTO); // Set mother's details
+
+    } catch (error) {
+      setRiskLoading(false);
+      setRiskFactors([]);
+      console.error('Error fetching risk factors:', error);
+    } finally {
+      setRiskLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      setLoading(false);
+      try {
+        const response = await fetch('http://localhost:8080/referrals/myAppointments', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+
+        const data = await response.json();
+        setAppointments(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-  <div>
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <div class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white light:bg-gray-900">
-        <div>
-            <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 light:bg-gray-800 light:text-gray-400 light:border-gray-600 light:hover:bg-gray-700 light:hover:border-gray-600 light:focus:ring-gray-700" type="button">
-                <span class="sr-only">Action button</span>
-                Action
-                <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                </svg>
-            </button>
-            <div id="dropdownAction" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 light:bg-gray-700 light:divide-gray-600">
-                <ul class="py-1 text-sm text-gray-700 light:text-gray-200" aria-labelledby="dropdownActionButton">
-                    <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 light:hover:bg-gray-600 light:hover:text-white">Reward</a>
-                    </li>
-                    <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 light:hover:bg-gray-600 light:hover:text-white">Promote</a>
-                    </li>
-                    <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 light:hover:bg-gray-600 light:hover:text-white">Activate account</a>
-                    </li>
-                </ul>
-                <div class="py-1">
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-200 light:hover:text-white">Delete User</a>
-                </div>
-            </div>
+    <div>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white light:bg-gray-900">
+          {/* Other elements like buttons and search input */}
         </div>
-        <label for="table-search" class="sr-only">Search</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg class="w-4 h-4 text-gray-500 light:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                </svg>
-            </div>
-            <input type="text" id="table-search-users" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500" placeholder="Search for users"/>
-        </div>
-    </div>
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 light:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 light:bg-gray-700 light:text-gray-400">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 light:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 light:bg-gray-700 light:text-gray-400">
             <tr>
-                <th scope="col" class="p-4">
-                    <div class="flex items-center">
-                        <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 light:focus:ring-blue-600 light:ring-offset-gray-800 light:focus:ring-offset-gray-800 focus:ring-2 light:bg-gray-700 light:border-gray-600" />
-                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
-                    </div>
-                </th>
-                <th scope="col" class="px-6 py-3">Name</th>
-                <th scope="col" class="px-6 py-3">Contact</th>
-                <th scope="col" class="px-6 py-3">Delivery Date</th>
-                <th scope="col" class="px-6 py-3">Next clinic date</th>
-                {/* <th scope="col" class="px-6 py-3">Actions</th> */}
+              <th scope="col" className="px-6 py-3">Name</th>
+              <th scope="col" className="px-6 py-3">NIC</th>
+              <th scope="col" className="px-6 py-3">Category</th>
+              <th scope="col" className="px-6 py-3">Appointment Date</th>
+              <th scope="col" className="px-6 py-3">Risk Factors</th>
             </tr>
-        </thead>
-        <tbody>
-            <tr class="bg-white border-b light:bg-gray-800 light:border-gray-700 hover:bg-gray-50 light:hover:bg-gray-600">
-                <td class="w-4 p-4">
-                    <div class="flex items-center">
-                        <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 light:focus:ring-blue-600 light:ring-offset-gray-800 light:focus:ring-offset-gray-800 focus:ring-2 light:bg-gray-700 light:border-gray-600" />
-                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                    </div>
+          </thead>
+          <tbody>
+            {appointments.map((appointment, index) => (
+              <tr key={index} className="bg-white border-b light:bg-gray-800 light:border-gray-700 hover:bg-gray-50 light:hover:bg-gray-600">
+                <td className="px-6 py-4">{appointment.motherName}</td>
+                <td className="px-6 py-4">{appointment.motherNic}</td>
+                <td className="px-6 py-4">{appointment.referrals[0].antenatalOrPostnatal || 'N/A'}</td>
+                <td className="px-6 py-4">{new Date(appointment.referrals[0].channelDate).toLocaleDateString()}</td>
+                <td className="px-6 py-4 whitespace-no-wrap">
+                  <button className="bg-yellow-500 text-white px-3 py-1 rounded mr-5 w-15" onClick={() => handleDayDialog(user)}>
+                    Add New
+                  </button>
+                  <button className="bg-green-500 text-white px-3 py-1 rounded w-15" onClick={() => handleShowButton(appointment.id)}>
+                    Show
+                  </button>
                 </td>
-                <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap light:text-white">
-                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="John Doe image"/>
-                    <div class="ps-3">
-                        <div class="text-base font-semibold">John Doe</div>
-                        <div class="font-normal text-gray-500">2103456756</div>
-                    </div>
-                </th>
-                <td class="px-6 py-4">0713073456</td>
-                <td class="px-6 py-4">
-                    <div class="flex items-center">
-                    2024-08-21
-                    </div>
-                </td>
-                <td class="px-6 py-4">2023-08-21</td>
-            </tr>
-            <tr class="bg-white border-b light:bg-gray-800 light:border-gray-700 hover:bg-gray-50 light:hover:bg-gray-600">
-                <td class="w-4 p-4">
-                    <div class="flex items-center">
-                        <input id="checkbox-table-search-2" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 light:focus:ring-blue-600 light:ring-offset-gray-800 light:focus:ring-offset-gray-800 focus:ring-2 light:bg-gray-700 light:border-gray-600" />
-                        <label for="checkbox-table-search-2" class="sr-only">checkbox</label>
-                    </div>
-                </td>
-                <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap light:text-white">
-                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Amal Kumara image" />
-                    <div class="ps-3">
-                        <div class="text-base font-semibold">Amal Kumara</div>
-                        <div class="font-normal text-gray-500">2100056756</div>
-                    </div>
-                </th>
-                <td class="px-6 py-4">0713074556</td>
-                <td class="px-6 py-4">
-                    <div class="flex items-center">
-                    2024-08-21
-                    </div>
-                </td>
-                <td class="px-6 py-4">2023-09-15</td>
-            </tr>
-            <tr class="bg-white light:bg-gray-800 hover:bg-gray-50 light:hover:bg-gray-600">
-                <td class="w-4 p-4">
-                    <div class="flex items-center">
-                        <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 light:focus:ring-blue-600 light:ring-offset-gray-800 light:focus:ring-offset-gray-800 focus:ring-2 light:bg-gray-700 light:border-gray-600" />
-                        <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
-                    </div>
-                </td>
-                <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap light:text-white">
-                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Samantha Perera image" />
-                    <div class="ps-3">
-                        <div class="text-base font-semibold">Samantha Perera</div>
-                        <div class="font-normal text-gray-500">2104456756</div>
-                    </div>
-                </th>
-                <td class="px-6 py-4">0713087456</td>
-                <td class="px-6 py-4">
-                    <div class="flex items-center">
-                    2024-08-21
-                    </div>
-                </td>
-                <td class="px-6 py-4">2023-10-10</td>
-            </tr>
-        </tbody>
-    </table>
-  </div>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-  <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-        <span class="text-sm font-normal text-gray-500 light:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing <span class="font-semibold text-gray-900 light:text-black">1-10</span> of <span class="font-semibold text-gray-900 light:text-black">1000</span></span>
-        <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 light:bg-gray-800 light:border-gray-700 light:text-gray-400 light:hover:bg-gray-700 light:hover:text-white">Previous</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 light:bg-gray-800 light:border-gray-700 light:text-gray-400 light:hover:bg-gray-700 light:hover:text-white">1</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 light:bg-gray-800 light:border-gray-700 light:text-gray-400 light:hover:bg-gray-700 light:hover:text-white">2</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 light:border-gray-700 light:bg-gray-700 light:text-white">3</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 light:bg-gray-800 light:border-gray-700 light:text-gray-400 light:hover:bg-gray-700 light:hover:text-white">4</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 light:bg-gray-800 light:border-gray-700 light:text-gray-400 light:hover:bg-gray-700 light:hover:text-white">5</a>
-            </li>
-            <li>
-        <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 light:bg-gray-800 light:border-gray-700 light:text-gray-400 light:hover:bg-gray-700 light:hover:text-white">Next</a>
-            </li>
-        </ul>
-    </nav>
-
-    {showAddDialog && (
-        <div>
-        <AddAppointmentDialog showAddDialog={showAddDialog} setShowAddDialog={setShowAddDialog} />
+      {showRiskFactorsDialog && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-black bg-opacity-50 absolute inset-0" onClick={handleCancel}></div>
+          <div className="bg-white p-6 rounded-lg z-10 max-w-md w-full overflow-auto">
+            <h3 className="mb-4 text-black text-lg font-semibold">Refferel Details {selectedRefferelId}</h3>
+            {motherDetails && (
+              <div className="mb-4">
+                {/* <p><strong>Name:</strong> {motherDetails.name}</p>
+                <p><strong>NIC:</strong> {motherDetails.nic}</p> */}
+                <p><strong>Antenatal/Postnatal:</strong> {motherDetails.antenatalOrPostnatal}</p>
+              
+                {motherDetails.antenatalOrPostnatal === 'Antenatal' ? (
+                  <div>
+                    <p><strong>Expected Delivery Date:</strong> {new Date(motherDetails.expectedDateOfDelivery).toLocaleDateString()}</p>
+                    <p><strong>POG:</strong> {motherDetails.pog}</p>
+                  </div>
+                ):(
+                  <div>
+                    <p><strong>Expected Delivery Date:</strong> {new Date(motherDetails.expectedDateOfDelivery).toLocaleDateString()}</p>
+                    <p><strong>POG:</strong> {motherDetails.pog}</p>
+                  </div>
+                )}
+                <div className='flex gap-10'>
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" disabled checked={motherDetails.parityGravidity} />
+                    <span>Gravidity</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" disabled checked={motherDetails.parityParity} />
+                    <span>Parity</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" disabled checked={motherDetails.parityChildren} />
+                    <span>Children</span>
+                  </label>
+                </div>
+                
+                <p><strong>reason for request:</strong> {motherDetails.reason_for_request}</p>
+          
+              </div>
+            )}
+            {riskLoading ? (
+              <div>Loading...</div>
+            ) : (
+              <div className="overflow-auto max-h-64">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risk Factor</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created By</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {/* reverse the risk factors */}
+                    
+                    {riskFactors.map((risk, index) => (
+                      <tr key={index}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{risk.riskFactor}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(risk.channelDate).toLocaleDateString()}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{risk.doctorName}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            <div className="flex justify-end mt-4">
+              <button className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2" onClick={handleCancel}>
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
-
-  </div>
-  
+    </div>
   );
 };

@@ -154,7 +154,7 @@ export default function RegForm() {
     e.preventDefault();
     formData.riskFactors = riskFactors;
     formData.doctorName = selectedDoctor;
-    formData.channelDate = selectedDate;
+    formData.channelDate = "selectedDate.toISOString().slice(0, 10)";
     formData.antenatalOrPostnatal = antenatal ? 'Antenatal' : 'Postnatal';
 
     try {

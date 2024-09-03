@@ -99,7 +99,7 @@ export default function RegForm() {
     modes_of_delivery: '',
     birth_weight: '',
     postnatal_day: '',
-    doctorName: '', 
+    doctorId: '', 
     channelDate: '',
     name: ''
   });
@@ -153,8 +153,8 @@ export default function RegForm() {
   const handleSubmit = async(e) => {
     e.preventDefault();
     formData.riskFactors = riskFactors;
-    formData.doctorName = selectedDoctor;
-    formData.channelDate = selectedDate;
+    formData.doctorId = selectedDoctor;
+    formData.channelDate = selectedDate.toISOString().slice(0, 10);
     formData.antenatalOrPostnatal = antenatal ? 'Antenatal' : 'Postnatal';
 
     try {
