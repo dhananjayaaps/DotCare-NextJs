@@ -428,7 +428,7 @@ export default function RegForm() {
       //             selected={selected}
       // onSelect={setSelected}
                   disabledDays={{ 
-                    daysOfWeek: [0, 1, 2, 3, 4, 5, 6].filter(day => !isDateSelectable(new Date().setDate(day))) // Disable days that are not selectable
+                  daysOfWeek: [0, 1, 2, 3, 4, 5, 6].filter(day => !isDateSelectable(new Date().setDate(day))), // Disable days that are not selectable
                   }}
                   modifiersClassNames={{ disabled: 'bg-gray-300 text-gray-500' }} // Custom styles for disabled dates
                   className="border border-gray-300 p-2 rounded w-full"
