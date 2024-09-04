@@ -32,12 +32,19 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   const [motherDetails, setMotherDetails] = useState(null); // New state to store mother's details
   const [riskLoading, setRiskLoading] = useState(false);
   const [selectedRefferelId, setSelectedRefferelId] = useState('');
+  const [addRFwindow, setAddRFwindow] = useState(false);
+  const [userNic, setUserNic] = useState(null);
 
   const handleShowButton = (id) => {
     setSelectedRefferelId(id);
     setShowRiskFactorsDialog(true);
     fetchRiskFactors(id);
   };
+
+  const handleAddRFButton = (nic) => {
+    setUserNic(nic);
+    setAddRFwindow(true);
+  }
 
   const handleCancel = () => {
     setShowRiskFactorsDialog(false);
@@ -94,6 +101,33 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     fetchAppointments();
   }, []);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [appointmentsPerPage] = useState(8); // Adjust the number of appointments per page as needed
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchDate, setSearchDate] = useState('');
+
+  const indexOfLastAppointment = currentPage * appointmentsPerPage;
+  const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
+  const currentAppointments = appointments
+    .filter(appointment =>
+      appointment.motherName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (searchDate === '' || new Date(appointment.referrals[0].channelDate).toLocaleDateString() === new Date(searchDate).toLocaleDateString())
+    )
+    .slice(indexOfFirstAppointment, indexOfLastAppointment);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const handleSearchChange = (e) => {
+      setSearchTerm(e.target.value);
+      setCurrentPage(1); // Reset to first page after search
+    };
+    
+    const handleDateChange = (e) => {
+      setSearchDate(e.target.value);
+      setCurrentPage(1); // Reset to first page after search
+    };
+    
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -101,8 +135,20 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   return (
     <div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white light:bg-gray-900">
-          {/* Other elements like buttons and search input */}
+      <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white light:bg-gray-900">
+          <input
+            type="text"
+            placeholder="Search by Name"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="border px-2 py-1 rounded"
+          />
+          <input
+            type="date"
+            value={searchDate}
+            onChange={handleDateChange}
+            className="border px-2 py-1 rounded"
+          />
         </div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 light:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 light:bg-gray-700 light:text-gray-400">
@@ -115,14 +161,14 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
             </tr>
           </thead>
           <tbody>
-            {appointments.map((appointment, index) => (
+            {currentAppointments.map((appointment, index) => (
               <tr key={index} className="bg-white border-b light:bg-gray-800 light:border-gray-700 hover:bg-gray-50 light:hover:bg-gray-600">
                 <td className="px-6 py-4">{appointment.motherName}</td>
                 <td className="px-6 py-4">{appointment.motherNic}</td>
                 <td className="px-6 py-4">{appointment.referrals[0].antenatalOrPostnatal || 'N/A'}</td>
                 <td className="px-6 py-4">{new Date(appointment.referrals[0].channelDate).toLocaleDateString()}</td>
                 <td className="px-6 py-4 whitespace-no-wrap">
-                  <button className="bg-yellow-500 text-white px-3 py-1 rounded mr-5 w-15" onClick={() => handleDayDialog(user)}>
+                  <button className="bg-yellow-500 text-white px-3 py-1 rounded mr-5 w-15" onClick={() => handleAddRFButton(appointment.motherNic)}>
                     Add New
                   </button>
                   <button className="bg-green-500 text-white px-3 py-1 rounded w-15" onClick={() => handleShowButton(appointment.id)}>
@@ -133,7 +179,27 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
             ))}
           </tbody>
         </table>
+        <div className="flex justify-center mt-4">
+        {[...Array(Math.ceil(appointments.length / appointmentsPerPage)).keys()].map(number => (
+          <button
+            key={number + 1}
+            onClick={() => paginate(number + 1)}
+            className={`px-3 py-1 rounded ${currentPage === number + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+          >
+            {number + 1}
+          </button>
+        ))}
       </div>
+    </div>
+      {addRFwindow && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-black bg-opacity-50 absolute inset-0" onClick={() => setAddRFwindow(false)}></div>
+          <div className="bg-white p-6 rounded-lg z-10 max-w-md w-full">
+            <h3 className="mb-4 text-black text-lg font-semibold">Add Risk Factor</h3>
+            <AddRiskFactorForm nic={userNic} setAddRFwindow={setAddRFwindow} />
+          </div>
+        </div>
+      )}
 
       {showRiskFactorsDialog && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -211,5 +277,105 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
         </div>
       )}
     </div>
+  );
+};
+
+
+const AddRiskFactorForm = ({ nic, setAddRFwindow }) => {
+  const [riskFactors, setRiskFactors] = useState(['']);
+  const [loading, setLoading] = useState(false);
+
+  const handleAddRiskFactorField = () => {
+    setRiskFactors([...riskFactors, '']);
+  };
+
+  const handleRiskFactorChange = (index, value) => {
+    const updatedRiskFactors = [...riskFactors];
+    updatedRiskFactors[index] = value;
+    setRiskFactors(updatedRiskFactors);
+  };
+
+  const handleRemoveRiskFactorField = (index) => {
+    const updatedRiskFactors = riskFactors.filter((_, i) => i !== index);
+    setRiskFactors(updatedRiskFactors);
+  };
+
+  const handleAddRiskFactors = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch('http://localhost:8080/referrals/addRiskFactor', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          nic,
+          riskFactors,
+        }),
+      });
+
+      if (response.ok) {
+        setRiskFactors(['']);
+        setAddRFwindow(false);
+      } else {
+        console.error('Failed to add risk factors:', response);
+      }
+    } catch (error) {
+      console.error('Error adding risk factors:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleAddRiskFactors}>
+      {riskFactors.map((riskFactor, index) => (
+        <div key={index} className="mb-4 flex items-center">
+          <input
+            type="text"
+            className="border border-gray-300 p-2 rounded w-full"
+            value={riskFactor}
+            onChange={(e) => handleRiskFactorChange(index, e.target.value)}
+            required
+          />
+          {index > 0 && (
+            <button
+              type="button"
+              onClick={() => handleRemoveRiskFactorField(index)}
+              className="ml-2 bg-red-500 text-white px-2 py-1 rounded"
+            >
+              Remove
+            </button>
+          )}
+        </div>
+      ))}
+      <div className="mb-4">
+        <button
+          type="button"
+          onClick={handleAddRiskFactorField}
+          className="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Add More
+        </button>
+      </div>
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          onClick={() => setAddRFwindow(false)}
+          className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2"
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          loading={loading}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Add
+        </Button>
+      </div>
+    </form>
   );
 };
