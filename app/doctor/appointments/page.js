@@ -7,7 +7,7 @@ import { Button } from '@nextui-org/react';
 import AddAppointmentDialog from './AddAppointmentDialog';
 
 export default function Mother() {
-  const [showAddDialog, setShowAddDialog] = useState(false);
+  // const [showAddDialog, setShowAddDialog] = useState(false);
 
   const router = useRouter();
 

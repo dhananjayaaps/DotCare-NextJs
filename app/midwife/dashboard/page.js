@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/react';
 import UserRegistrations from './userregistrations';
 import AppointmentChart from './appointmentsChart';
-import Calender from './calender';
 
 export default function Dashboard() {
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -26,7 +25,7 @@ export default function Dashboard() {
             {/* </p> */}
         </div>
         
-        <Calender />
+        {/* <Calender /> */}
         <div className="flex items-center justify-center h-24 rounded">
             <p className="text-2xl text-gray-400 dark:text-gray-500">
             <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
@@ -241,11 +240,11 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
         </ul>
     </nav>
 
-    {showAddDialog && (
+    {/* {showAddDialog && (
         <div>
         <AddAppointmentDialog showAddDialog={showAddDialog} setShowAddDialog={setShowAddDialog} />
         </div>
-      )}
+      )} */}
 
   </div>
   
