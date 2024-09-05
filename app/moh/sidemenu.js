@@ -1,22 +1,15 @@
 import React, { useEffect } from 'react';
+import { usePathname } from 'next/navigation'
 
 const Sidemenu = ({ highlightedItem }) => {
   
-  const isActive = (item) => item === highlightedItem ? 'text-gray-900 bg-gray-200' : 'text-gray-700';
-
   // get is active as url last property
-  useEffect(() => {
-    if (typeof window === 'undefined') 
-      {return 0}
-    else {
-      const isActive = (item) => {
-        const url = window.location.href;
-        const urlArray = url.split('/');
-        const lastUrl = urlArray[urlArray.length - 1];
-        return lastUrl === item ? 'text-gray-900 bg-gray-200' : 'text-gray-700';
-      };
-    }
-  }, []);
+  const pathname = usePathname()
+  const isActive = (item) => {
+    const urlArray = pathname.split('/');
+    const lastUrl = urlArray[urlArray.length - 1];
+    return lastUrl === item ? 'text-gray-900 bg-gray-200' : 'text-gray-700';
+  }
 
   return (
     <div>

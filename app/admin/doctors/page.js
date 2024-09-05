@@ -286,6 +286,11 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
           </div>
         </div>
       )}
+      {showAddDialog && (
+        <div>
+          <AddUserDialog showAddDialog={showAddDialog} setShowAddDialog={setShowAddDialog} />
+        </div>
+      )}
     </div>
   );
 };
