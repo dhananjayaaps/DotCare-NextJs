@@ -1,15 +1,20 @@
-import React from 'react';
+import {React, useEffect} from 'react';
 
 const Sidemenu = ({ highlightedItem }) => {
-  // const isActive = (item) => item === highlightedItem ? 'text-gray-900 bg-gray-200' : 'text-gray-700';
+  let isActive = (item) => item === highlightedItem ? 'text-gray-900 bg-gray-200' : 'text-gray-700';
 
-  // get is active as url last property
-  const isActive = (item) => {
-    const url = window.location.href;
-    const urlArray = url.split('/');
-    const lastUrl = urlArray[urlArray.length - 1];
-    return lastUrl === item ? 'text-gray-900 bg-gray-200' : 'text-gray-700';
-  };
+  useEffect(() => {
+    if (typeof window === 'undefined') 
+      {return 0}
+    else {
+        isActive = (item) => {
+        const url = window.location.href;
+        const urlArray = url.split('/');
+        const lastUrl = urlArray[urlArray.length - 1];
+        return lastUrl === item ? 'text-gray-900 bg-gray-200' : 'text-gray-700';
+      };
+    }
+  }, []);
 
   return (
     <div>

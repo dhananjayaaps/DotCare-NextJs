@@ -12,20 +12,20 @@ export default function RootLayout({ children }) {
   const [isLogged, setIsLogged] = useState(false);
 
 
-  useEffect(() => {
-    const cookies =  cookies().getAll()
-    console.log(cookies);
-    const token = cookies.jwtToken;
-    console.log("value is " + token);
-    if (token) {
-      setIsLogged(true);
-    } else {
-      //navigate to login
-      setIsLogged(false);
-      // redirect(`/auth/login`)
+  // useEffect(() => {
+  //   const cookies =  cookies().getAll()
+  //   console.log(cookies);
+  //   const token = cookies.jwtToken;
+  //   console.log("value is " + token);
+  //   if (token) {
+  //     setIsLogged(true);
+  //   } else {
+  //     //navigate to login
+  //     setIsLogged(false);
+  //     // redirect(`/auth/login`)
       
-    }
-  }, []);
+  //   }
+  // }, []);
 
   // if (!isLogged){
   //   return (

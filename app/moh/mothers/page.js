@@ -26,13 +26,13 @@ export default function Mother() {
         </Button>
         </div>
         <div className="flex-1 overflow-auto p-6">
-        <Table setShowAddDialog={setShowAddDialog} showAddDialog={showAddDialog} />
+        <Table />
         </div>
     </div>
   );
 }
 
-const Table = ({ setShowAddDialog, showAddDialog }) => {
+const Table = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [currentAction, setCurrentAction] = useState('');
   const [currentUser, setCurrentUser] = useState(null);

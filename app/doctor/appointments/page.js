@@ -18,13 +18,13 @@ export default function Mother() {
   return (
     <div className="flex-1 flex-col overflow-auto p-6">
       <div className="flex-1 overflow-auto p-6">
-        <Table setShowAddDialog={setShowAddDialog} showAddDialog={showAddDialog} />
+        <Table />
       </div>
     </div>
   );
 }
 
-const Table = ({ setShowAddDialog, showAddDialog }) => {
+const Table = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showRiskFactorsDialog, setShowRiskFactorsDialog] = useState(false);

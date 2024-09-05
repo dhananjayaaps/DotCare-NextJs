@@ -4,8 +4,8 @@ import Sidemenu from '../../components/sidemenu';
 import NavBar from '@/app/components/NavBar';
 import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/react';
-import UserRegistrations from './userregistrations';
-import AppointmentChart from './appointmentsChart';
+// import UserRegistrations from './userregistrations';
+// import AppointmentChart from './appointmentsChart';
 // import Calender from './calender';
 
 export default function Dashboard() {
@@ -19,8 +19,8 @@ export default function Dashboard() {
   return (
     <div className="flex-1 flex-col overflow-auto p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-        <UserRegistrations />
-        <AppointmentChart />
+        {/* <UserRegistrations /> */}
+        {/* <AppointmentChart /> */}
         <div className="flex items-center justify-center h-24 rounded">
             {/* <p className="text-2xl text-gray-400 dark:text-gray-500"> */}
             {/* </p> */}

@@ -7,7 +7,6 @@ import { Button } from '@nextui-org/react';
 import AddAppointmentDialog from './AddAppointmentDialog';
 
 export default function Mother() {
-//   const [showAddDialog, setShowAddDialog] = useState(false);
 
   const router = useRouter();
 
@@ -17,23 +16,14 @@ export default function Mother() {
 
   return (
     <div className="flex-1 flex-col overflow-auto p-6">
-        <div className="flex-1 overflow-auto p-4">
-            <Button
-            color="primary"
-            className="bg-blue-600 ml-3 rounded-lg text-white"
-            onClick={() => setShowAddDialog(true)}
-            >
-            Create a new appointment
-            </Button>
-        </div>
         <div className="flex-1 overflow-auto p-6">
-        <Table setShowAddDialog={setShowAddDialog} showAddDialog={showAddDialog} />
+        <Table />
         </div>
     </div>
   );
 }
 
-const Table = ({ setShowAddDialog, showAddDialog }) => {
+const Table = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [currentAction, setCurrentAction] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
@@ -223,12 +213,6 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
             </li>
         </ul>
     </nav>
-
-    {showAddDialog && (
-        <div>
-        <AddAppointmentDialog showAddDialog={showAddDialog} setShowAddDialog={setShowAddDialog} />
-        </div>
-      )}
 
   </div>
   
