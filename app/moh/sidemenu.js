@@ -1,9 +1,8 @@
-import {React, useEffect, useState } from 'react';
+import {React, useEffect, useState} from 'react';
 import { usePathname } from 'next/navigation'
 
-const Sidemenu = ({ highlightedItem, loggedUser }) => {
-  
-  // get is active as url last property
+const Sidemenu = ({ highlightedItem , loggedUser}) => {
+
   const pathname = usePathname()
   const isActive = (item) => {
     const urlArray = pathname.split('/');
@@ -18,18 +17,18 @@ const Sidemenu = ({ highlightedItem, loggedUser }) => {
 
           <ul className="mt-6 space-y-1">
 
-          <li>
+            <li>
               <a
-                href="/midwife/dashboard"
+                href="/moh/addmother"
                 className={`block rounded-lg px-4 py-2 text-sm font-medium ${isActive('dashboard')} hover:bg-gray-100 hover:text-gray-700`}
               >
-                Home
+                Make Refferel
               </a>
             </li>
 
             <li>
               <a
-                href="/midwife/mothers"
+                href="/moh/mothers"
                 className={`block rounded-lg px-4 py-2 text-sm font-medium ${isActive('mothers')}`}
               >
                 Mothers
@@ -38,16 +37,7 @@ const Sidemenu = ({ highlightedItem, loggedUser }) => {
 
             <li>
               <a
-                href="/midwife/addmother"
-                className={`block rounded-lg px-4 py-2 text-sm font-medium ${isActive('addmother')} hover:bg-gray-100 hover:text-gray-700`}
-              >
-                Register Mothers
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="/midwife/appointments"
+                href="/moh/appointments"
                 className={`block rounded-lg px-4 py-2 text-sm font-medium ${isActive('appointments')} hover:bg-gray-100 hover:text-gray-700`}
               >
                 Appointments

@@ -17,12 +17,12 @@ const Sidemenu = ({ highlightedItem , loggedUser}) => {
 
           <ul className="mt-6 space-y-1">
 
-          <li>
+            <li>
               <a
-                href="/doctor/dashboard"
+                href="/doctor/addmother"
                 className={`block rounded-lg px-4 py-2 text-sm font-medium ${isActive('dashboard')} hover:bg-gray-100 hover:text-gray-700`}
               >
-                Home
+                Make Refferel
               </a>
             </li>
 
