@@ -11,23 +11,6 @@ export default function NavBar() {
           {/* <AcmeLogo /> */}
           <p className="hidden sm:block font-bold text-inherit">DotCare</p>
         </NavbarBrand>
-        <NavbarContent className="hidden sm:flex gap-3">
-          <NavbarItem>
-            <Link color="foreground" href="#">
-              Home
-            </Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-            <Link href="#" aria-current="page" color="secondary">
-              News
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link color="foreground" href="#">
-              Contact Us
-            </Link>
-          </NavbarItem>
-        </NavbarContent>
       </NavbarContent>
 
       <NavbarContent as="div" className="items-center" justify="end">

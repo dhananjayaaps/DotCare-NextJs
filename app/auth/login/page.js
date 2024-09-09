@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function LogIn() {
   const [formData, setFormData] = useState({
@@ -30,7 +31,20 @@ export default function LogIn() {
       if (response.ok) {
         const data = await response.json();
         alert('Log In successfully');
+
+        if (data.roles.includes('ROLE_ADMIN')) {
+          router.push('/admin/admins');
+        } else if (data.roles.includes('ROLE_DOCTOR')) {
+          router.push('/doctor/appointments');
+        } else if (data.roles.includes('ROLE_MOH')) {
+          router.push('/moh/addMother');
+        } else if (data.roles.includes('ROLE_USER')) {
+          alert('Contact Admin for the assign roles');
+          router.push('/');
+        }
+
         console.log(data);
+
       } else {
         const errorData = await response.json();
         console.log(errorData);
@@ -42,6 +56,7 @@ export default function LogIn() {
     }
   };
   
+  const router = useRouter();
 
   return (
     <div>
