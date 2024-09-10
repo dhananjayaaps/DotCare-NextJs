@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
+import PdfGenerator from '@/app/components/RefferelPDF';
 
 import DatePicker from "react-datepicker";
 
@@ -71,10 +72,23 @@ export default function RegForm() {
     }
   }, [selectedDoctor]);
 
+  function findNameById(id) {
+    const user = doctors.find((user) => user.id == id);
+    return user ? `${user.first_name} ${user.last_name}` : "User not found";
+  }
+
   // Handle change for the doctor dropdown
-  const handleDoctorChange = (e) => {
-    setSelectedDoctor(e.target.value);
-    setSelectedDate(null); // Reset selected date when changing doctor
+  const handleDoctorChange = (event) => {
+    const doctorId = event.target.value;
+    const userName = findNameById(doctorId);
+    console.log(userName);
+
+    setSelectedDoctor(doctorId);
+    setFormData((prevData) => ({
+      ...prevData,
+      doctorId: doctorId,
+      DoctorName: userName,
+    }));
   };
 
   const isDateSelectable = (date) => {
@@ -101,7 +115,8 @@ export default function RegForm() {
     postnatal_day: '',
     doctorId: '', 
     channelDate: '',
-    name: ''
+    name: '',
+    doctorName: ''
   });
 
   const calculatepog = (edd) => {
@@ -171,7 +186,7 @@ export default function RegForm() {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
+      handleNextStep();
       alert('Data submitted successfully');
     } catch (error) {
       console.error('Error Delete Data:', error);
@@ -437,7 +452,7 @@ export default function RegForm() {
             )}
 
             <div className="flex justify-between mt-4">
-              {step > 1 && (
+              {step > 1 && step < 4 && (
                 <button
                   type="button"
                   className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
@@ -446,7 +461,7 @@ export default function RegForm() {
                   Previous
                 </button>
               )}
-              {step < 3 ? (
+              {step < 3 &&(
                 <button
                   type="button"
                   className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -454,7 +469,9 @@ export default function RegForm() {
                 >
                   Next
                 </button>
-              ) : (
+              )}
+              {step === 3 &&(
+                <>
                 <button
                   type="submit"
                   className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -462,7 +479,12 @@ export default function RegForm() {
                 >
                   Submit
                 </button>
+                </>
               )}
+              {step === 4 && (
+                  <PdfGenerator data={formData} isAntenatal={antenatal} />
+                )
+              }
             </div>
           </form>
         </div>
