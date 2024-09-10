@@ -10,6 +10,27 @@ const Sidemenu = ({ highlightedItem , loggedUser}) => {
     return lastUrl === item ? 'text-gray-900 bg-gray-200' : 'text-gray-700';
   }
 
+  
+  const logout = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/auth/logout`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    } finally {
+      alert('Logged out successfully');
+    }
+  };
+
   return (
     <div>
       <div className="flex h-screen w-56 flex-col justify-between border-e bg-white">
@@ -68,7 +89,7 @@ const Sidemenu = ({ highlightedItem , loggedUser}) => {
                 </summary>
 
                 <ul className="mt-2 space-y-1 px-4">
-                  <li>
+                  {/* <li>
                     <a
                       href="#"
                       className={`block rounded-lg px-4 py-2 text-sm font-medium ${isActive('Details')} hover:bg-gray-100 hover:text-gray-700`}
@@ -84,13 +105,14 @@ const Sidemenu = ({ highlightedItem , loggedUser}) => {
                     >
                       Security
                     </a>
-                  </li>
+                  </li> */}
 
                   <li>
                     <form action="#">
                       <button
                         type="submit"
                         className="w-full rounded-lg px-4 py-2 text-sm font-medium text-gray-500 [text-align:_inherit] hover:bg-gray-100 hover:text-gray-700"
+                        onClick={logout}
                       >
                         Logout
                       </button>

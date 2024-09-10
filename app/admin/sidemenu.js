@@ -107,7 +107,7 @@ const Sidemenu = ({ highlightedItem, loggedUser}) => {
                 </summary>
 
                 <ul className="mt-2 space-y-1 px-4">
-                  <li>
+                  {/* <li>
                     <a
                       href="#"
                       className={`block rounded-lg px-4 py-2 text-sm font-medium ${isActive('Details')} hover:bg-gray-100 hover:text-gray-700`}
@@ -123,7 +123,7 @@ const Sidemenu = ({ highlightedItem, loggedUser}) => {
                     >
                       Security
                     </a>
-                  </li>
+                  </li> */}
 
                   <li>
                     <form action="#">
