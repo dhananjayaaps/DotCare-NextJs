@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
+import PdfGenerator from '@/app/components/RefferelPDF';
 
 import DatePicker from "react-datepicker";
 
@@ -71,10 +72,24 @@ export default function RegForm() {
     }
   }, [selectedDoctor]);
 
+  function findNameById(id) {
+    console.log(id);
+    const user = doctors.find((user) => user.doctorUsername == id);
+    return user ? `${user.doctorName}` : "User not found";
+  }
+
   // Handle change for the doctor dropdown
-  const handleDoctorChange = (e) => {
-    setSelectedDoctor(e.target.value);
-    setSelectedDate(null); // Reset selected date when changing doctor
+  const handleDoctorChange = (event) => {
+    const doctorId = event.target.value;
+    const userName = findNameById(doctorId);
+    console.log(userName);
+
+    setSelectedDoctor(doctorId);
+    setFormData((prevData) => ({
+      ...prevData,
+      doctorId: doctorId,
+      DoctorName: userName,
+    }));
   };
 
   const isDateSelectable = (date) => {
@@ -101,7 +116,8 @@ export default function RegForm() {
     postnatal_day: '',
     doctorId: '', 
     channelDate: '',
-    name: ''
+    name: '',
+    doctorName: ''
   });
 
   const calculatepog = (edd) => {
@@ -173,8 +189,9 @@ export default function RegForm() {
       }
   
       alert('Data submitted successfully');
+      handleNextStep();
     } catch (error) {
-      console.error('Error Delete Data:', error);
+      console.error('Error Submit Data:', error);
     }
 
     console.log({ ...formData});
@@ -294,22 +311,24 @@ export default function RegForm() {
                     <div className="mb-4">
                       <label className="block text-gray-700 capitalize">Birth Weight</label>
                       <input
-                        type="text"
+                        type="number"
                         name="birth_weight"
                         value={formData.birth_weight}
                         onChange={handleInputChange}
                         className="border border-gray-300 p-2 rounded w-full"
+                        step="0.01" // Allows two decimal places
                         required
                       />
                     </div>
                     <div className="mb-4">
                       <label className="block text-gray-700 capitalize">Postnatal Day</label>
                       <input
-                        type="text"
+                        type="date"
                         name="postnatal_day"
                         value={formData.postnatal_day}
                         onChange={handleInputChange}
                         className="border border-gray-300 p-2 rounded w-full"
+                        max={new Date().toISOString().split("T")[0]} // Sets the maximum date to today
                         required
                       />
                     </div>
@@ -439,7 +458,7 @@ export default function RegForm() {
             )}
 
             <div className="flex justify-between mt-4">
-              {step > 1 && (
+              {step > 1 && step < 4 && (
                 <button
                   type="button"
                   className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
@@ -448,7 +467,7 @@ export default function RegForm() {
                   Previous
                 </button>
               )}
-              {step < 3 ? (
+              {step < 3 &&(
                 <button
                   type="button"
                   className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -456,7 +475,9 @@ export default function RegForm() {
                 >
                   Next
                 </button>
-              ) : (
+              )}
+              {step === 3 &&(
+                <>
                 <button
                   type="submit"
                   className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -464,7 +485,12 @@ export default function RegForm() {
                 >
                   Submit
                 </button>
+                </>
               )}
+              {step === 4 && (
+                  <PdfGenerator data={formData} isAntenatal={antenatal} />
+                )
+              }
             </div>
           </form>
         </div>

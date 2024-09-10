@@ -73,7 +73,8 @@ export default function RegForm() {
   }, [selectedDoctor]);
 
   function findNameById(id) {
-    const user = doctors.find((user) => user.id == id);
+    console.log(id);
+    const user = doctors.find((user) => user.username == id);
     return user ? `${user.first_name} ${user.last_name}` : "User not found";
   }
 
@@ -189,7 +190,7 @@ export default function RegForm() {
       handleNextStep();
       alert('Data submitted successfully');
     } catch (error) {
-      console.error('Error Delete Data:', error);
+      console.error('Error Submit Data:', error);
     }
 
     console.log({ ...formData});
@@ -309,22 +310,24 @@ export default function RegForm() {
                     <div className="mb-4">
                       <label className="block text-gray-700 capitalize">Birth Weight</label>
                       <input
-                        type="text"
+                        type="number"
                         name="birth_weight"
                         value={formData.birth_weight}
                         onChange={handleInputChange}
                         className="border border-gray-300 p-2 rounded w-full"
+                        step="0.01" // Allows two decimal places
                         required
                       />
                     </div>
                     <div className="mb-4">
                       <label className="block text-gray-700 capitalize">Postnatal Day</label>
                       <input
-                        type="text"
+                        type="date"
                         name="postnatal_day"
                         value={formData.postnatal_day}
                         onChange={handleInputChange}
                         className="border border-gray-300 p-2 rounded w-full"
+                        max={new Date().toISOString().split("T")[0]} // Sets the maximum date to today
                         required
                       />
                     </div>
@@ -425,7 +428,7 @@ export default function RegForm() {
               >
                 <option value="">Select a Doctor</option>
                 {doctors.map((doctor) => (
-                  <option key={doctor.id} value={doctor.id}>
+                  <option key={doctor.id} value={doctor.username}>
                     {doctor.first_name} {doctor.last_name}
                   </option>
                 ))}
