@@ -79,7 +79,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     const fetchAppointments = async () => {
       setLoading(false);
       try {
-        const response = await fetch('http://localhost:8080/referrals/myAppointments', {
+        const response = await fetch('http://localhost:8080/referrals/myMothers', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
