@@ -1,6 +1,9 @@
 import jsPDF from 'jspdf';
 
 const PdfGenerator = ({ data, isAntenatal }) => {
+
+  console.log(data);
+
   const handleGeneratePdf = () => {
     const doc = new jsPDF();
 
@@ -33,7 +36,7 @@ const PdfGenerator = ({ data, isAntenatal }) => {
       { label: 'Parity - Parity', value: data.parityParity ? 'Yes' : 'No' },
       { label: 'Parity - Children', value: data.parityChildren ? 'Yes' : 'No' },
       { label: 'Reason for Request', value: data.reason_for_request },
-      { label: 'Doctor Name', value: data.DoctorName },
+      { label: 'Doctor Name', value: data.doctorName },
       { label: 'Channel Date', value: data.channelDate },
     ];
 
