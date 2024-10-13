@@ -16,7 +16,7 @@ export default function RegForm() {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState('');
   const [assignedDates, setAssignedDates] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState();
 
   useEffect(() => {
     // Fetch list of doctors from API
@@ -99,7 +99,7 @@ export default function RegForm() {
 
   const [formData, setFormData] = useState({
     nic: '',
-    antenatalOrPostnatal: '',
+    antenatalOrPostnatal: 'Antenatal',
     deliveryDate: '',
     expectedDateOfDelivery: '',
     pog: '', // Period of Gestational
@@ -114,7 +114,7 @@ export default function RegForm() {
     doctorId: '',
     channelDate: '',
     name: '',
-    doctorName: ''
+    doctorName: '',
   });
 
   const calculatepog = (edd) => {
@@ -171,7 +171,7 @@ export default function RegForm() {
     formData.antenatalOrPostnatal = antenatal ? 'Antenatal' : 'Postnatal';
 
     try {
-      const response = await fetch('http://localhost:8080/referrals', {
+      const response = await fetch('http://localhost:8080/referrals/byMoh', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -204,7 +204,7 @@ export default function RegForm() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {step === 1 && (
               <>
-                <CheckUser />
+                <CheckUser formData={formData} setFormData={setFormData} setAntenatal={setAntenatal} />
               </>
             )}
 
