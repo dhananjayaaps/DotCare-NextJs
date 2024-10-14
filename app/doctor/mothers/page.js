@@ -155,7 +155,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
               <th scope="col" className="px-6 py-3">Name</th>
               <th scope="col" className="px-6 py-3">NIC</th>
               <th scope="col" className="px-6 py-3">Category</th>
-              <th scope="col" className="px-6 py-3">Appointment Date</th>
+              {/* <th scope="col" className="px-6 py-3">Appointment Date</th> */}
               <th scope="col" className="px-6 py-3">Risk Factors</th>
             </tr>
           </thead>
@@ -170,7 +170,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                   <button className="bg-yellow-500 text-white px-3 py-1 rounded mr-5 w-15" onClick={() => handleAddRFButton(appointment.motherNic)}>
                     Add New
                   </button>
-                  <button className="bg-green-500 text-white px-3 py-1 rounded w-15" onClick={() => handleShowButton(appointment.id)}>
+                  <button className="bg-green-500 text-white px-3 py-1 rounded w-15" onClick={() => handleShowButton(appointment.motherNic)}>
                     Show
                   </button>
                 </td>

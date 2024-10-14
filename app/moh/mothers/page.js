@@ -54,7 +54,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   const fetchRiskFactors = async (id) => {
     setRiskLoading(true);
     try {
-      const response = await fetch(`http://localhost:8080/referrals/getRFandMomById?id=${id}`, {
+      const response = await fetch(`http://localhost:8080/mother/getRFandMomById?id=${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -164,13 +164,13 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
               <tr key={index} className="bg-white border-b light:bg-gray-800 light:border-gray-700 hover:bg-gray-50 light:hover:bg-gray-600">
                 <td className="px-6 py-4">{appointment.motherName}</td>
                 <td className="px-6 py-4">{appointment.motherNic}</td>
-                <td className="px-6 py-4">{appointment.referrals[0].antenatalOrPostnatal || 'N/A'}</td>
+                <td className="px-6 py-4">{appointment.referral.antenatalOrPostnatal || 'N/A'}</td>
                 {/* <td className="px-6 py-4">{new Date(appointment.referrals[0].channelDate).toLocaleDateString()}</td> */}
                 <td className="px-6 py-4 whitespace-no-wrap">
                   <button className="bg-yellow-500 text-white px-3 py-1 rounded mr-5 w-15" onClick={() => handleAddRFButton(appointment.motherNic)}>
                     Add New
                   </button>
-                  <button className="bg-green-500 text-white px-3 py-1 rounded w-15" onClick={() => handleShowButton(appointment.id)}>
+                  <button className="bg-green-500 text-white px-3 py-1 rounded w-15" onClick={() => handleShowButton(appointment.motherNic)}>
                     Show
                   </button>
                 </td>
@@ -204,24 +204,30 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="bg-black bg-opacity-50 absolute inset-0" onClick={handleCancel}></div>
           <div className="bg-white p-6 rounded-lg z-10 max-w-md w-full overflow-auto">
-            <h3 className="mb-4 text-black text-lg font-semibold">Refferel Details {selectedRefferelId}</h3>
+            <h3 className="mb-4 text-black text-lg font-semibold">Refferel Latest Details</h3>
             {motherDetails && (
               <div className="mb-4">
                 {/* <p><strong>Name:</strong> {motherDetails.name}</p>
                 <p><strong>NIC:</strong> {motherDetails.nic}</p> */}
                 <p><strong>Antenatal/Postnatal:</strong> {motherDetails.antenatalOrPostnatal}</p>
               
-                {motherDetails.antenatalOrPostnatal === 'Antenatal' ? (
-                  <div>
-                    <p><strong>Expected Delivery Date:</strong> {new Date(motherDetails.expectedDateOfDelivery).toLocaleDateString()}</p>
-                    <p><strong>POG:</strong> {motherDetails.pog}</p>
-                  </div>
-                ):(
-                  <div>
-                    <p><strong>Expected Delivery Date:</strong> {new Date(motherDetails.expectedDateOfDelivery).toLocaleDateString()}</p>
-                    <p><strong>POG:</strong> {motherDetails.pog}</p>
-                  </div>
-                )}
+                {motherDetails.antenatalOrPostnatal === 'Antenatal'  && (<><p>
+                    <strong>Expected Delivery Date:</strong>{' '}
+                    {motherDetails.expectedDateOfDelivery
+                      ? new Date(motherDetails.expectedDateOfDelivery).toLocaleDateString()
+                      : 'N/A'}
+                  </p><p>
+                    <strong>POG:</strong> {motherDetails.pog || 'N/A'}
+                  </p></>)
+                }
+                {motherDetails.antenatalOrPostnatal === 'Postnatal'  && (<><p>
+                    <strong>Postnatal Date:</strong> {motherDetails.postnatal_day || 'N/A'}
+                    </p><p>
+                    <strong>Modes of Delivery:</strong> {motherDetails.modes_of_delivery || 'N/A'}
+                    </p><p>
+                    <strong>Birth Weight:</strong> {motherDetails.birth_weight || 'N/A'} g
+                  </p></>)
+                }
                 <div className='flex gap-10'>
                   <label className="flex items-center space-x-2">
                     <input type="checkbox" disabled checked={motherDetails.parityGravidity} />

@@ -20,7 +20,7 @@ const CheckUser = ({ formData, setFormData, setAntenatal }) => {
         setFormData({
           ...formData,
           name: response.data.name,
-          antenatalOrPostnatal: response.data.status === "prenatal" ? "Antenatal" : "Postnatal",
+        //   antenatalOrPostnatal: response.data.status === "Antenatal" ? "Antenatal" : "Postnatal",
         });
         setError("");
       } else {

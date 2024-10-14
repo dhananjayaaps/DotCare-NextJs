@@ -270,7 +270,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
           ></div>
           <div className="bg-white light:bg-gray-800 p-6 rounded-lg z-10 max-w-md w-full overflow-auto">
             <h3 className="mb-4 text-black light:text-white text-lg font-semibold">
-              Referral Details {selectedReferralId}
+              Referral Details
             </h3>
             {motherDetails && (
               <div className="mb-4">
