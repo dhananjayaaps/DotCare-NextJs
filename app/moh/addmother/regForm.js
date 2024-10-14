@@ -92,7 +92,14 @@ export default function RegForm() {
   };
 
   const isDateSelectable = (date) => {
+    const today = new Date(); 
     const ndate = new Date(date);
+    
+    // Restrict past dates
+    if (ndate.setHours(0, 0, 0, 0) < today.setHours(0, 0, 0, 0)) {
+      return false;
+    }
+    
     const day = ndate.getDay();
     return assignedDates.includes(day);
   };

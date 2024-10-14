@@ -139,8 +139,8 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     const matchesName = appointment.motherName.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDate =
       searchDate === '' ||
-      (appointment.referrals[0] &&
-        new Date(appointment.referrals[0].channelDate).toLocaleDateString() === new Date(searchDate).toLocaleDateString());
+      (appointment.referral &&
+        new Date(appointment.referral.channelDate).toLocaleDateString() === new Date(searchDate).toLocaleDateString());
     return matchesName && matchesDate;
   });
 
@@ -201,11 +201,11 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                     <td className="px-6 py-4">{appointment.motherName}</td>
                     <td className="px-6 py-4">{appointment.motherNic}</td>
                     <td className="px-6 py-4">
-                      {appointment.referrals[0]?.antenatalOrPostnatal || 'N/A'}
+                      {appointment.referral.antenatalOrPostnatal || 'N/A'}
                     </td>
                     <td className="px-6 py-4">
-                      {appointment.referrals[0]?.channelDate
-                        ? new Date(appointment.referrals[0].channelDate).toLocaleDateString()
+                      {appointment.referral.channelDate
+                        ? new Date(appointment.referral.channelDate).toLocaleDateString()
                         : 'N/A'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
