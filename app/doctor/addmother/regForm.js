@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import PdfGenerator from '@/app/components/RefferelPDF';
+import CheckUser from './checkUser';
 
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function RegForm() {
@@ -15,14 +15,14 @@ export default function RegForm() {
 
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState('');
-  const [assignedDates, setAssignedDates] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(useState(new Date()));
+  const [assignedDates, setAssignedDates] = useState([1,2,3,4,5]);
+  const [selectedDate, setSelectedDate] = useState();
 
   useEffect(() => {
     // Fetch list of doctors from API
     const fetchDoctors = async () => {
       try {
-        const response = await fetch('http://localhost:8080/roles/byrole?role=moh', {
+        const response = await fetch('http://localhost:8080/clinics/listMoh', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ export default function RegForm() {
           throw new Error('Failed to fetch doctors');
         }
         const data = await response.json();
-        setDoctors(data.data); // Assuming the response contains a "doctors" array
+        setDoctors(data); // Assuming the response contains a "doctors" array
       } catch (error) {
         console.error('Error fetching doctors:', error);
       }
@@ -42,67 +42,43 @@ export default function RegForm() {
     fetchDoctors();
   }, []);
 
-  
-
-  useEffect(() => {
-    if (selectedDoctor) {
-      // Fetch the dates assigned to the selected doctor
-      const fetchAssignedDates = async () => {
-        try {
-          const response = await fetch(`http://localhost:8080/doctordates/byId?id=${selectedDoctor.id}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-          });
-
-          if (!response.ok) {
-            throw new Error('Failed to fetch assigned dates');
-          }
-
-          const data = await response.json();
-          setAssignedDates(data.days); // Assuming the response contains a "days" array with numbers representing weekdays (e.g., [1, 3, 5])
-        } catch (error) {
-          console.error('Error fetching assigned dates:', error);
-        }
-      };
-
-      fetchAssignedDates();
-    }
-  }, [selectedDoctor]);
-
   function findNameById(id) {
-    console.log(id);
-    const user = doctors.find((user) => user.username == id);
-    return user ? `${user.first_name} ${user.last_name}` : "User not found";
+    const user = doctors.find((user) => user.doctorUsername == id);
+    return user ? `${user.doctorName}` : "User not found";
   }
 
   // Handle change for the doctor dropdown
   const handleDoctorChange = (event) => {
     const doctorId = event.target.value;
     const userName = findNameById(doctorId);
+
+    console.log(doctorId);
     console.log(userName);
 
     setSelectedDoctor(doctorId);
     setFormData((prevData) => ({
       ...prevData,
       doctorId: doctorId,
-      DoctorName: userName,
+      doctorName: userName,
     }));
   };
 
   const isDateSelectable = (date) => {
-    // make a date object and set the date
+    const today = new Date(); 
     const ndate = new Date(date);
-    const day = ndate.getDay(); // Get the day of the week (0 = Sunday, 6 = Saturday)
-    console.log(assignedDates.includes(day));
+    
+    // Restrict past dates
+    if (ndate.setHours(0, 0, 0, 0) < today.setHours(0, 0, 0, 0)) {
+      return false;
+    }
+    
+    const day = ndate.getDay();
     return assignedDates.includes(day);
   };
 
   const [formData, setFormData] = useState({
     nic: '',
-    antenatalOrPostnatal: '',
+    antenatalOrPostnatal: 'Antenatal',
     deliveryDate: '',
     expectedDateOfDelivery: '',
     pog: '', // Period of Gestational
@@ -114,10 +90,10 @@ export default function RegForm() {
     modes_of_delivery: '',
     birth_weight: '',
     postnatal_day: '',
-    doctorId: '', 
+    doctorId: '',
     channelDate: '',
     name: '',
-    doctorName: ''
+    doctorName: '',
   });
 
   const calculatepog = (edd) => {
@@ -166,7 +142,7 @@ export default function RegForm() {
     setRiskFactors(riskFactors.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     formData.riskFactors = riskFactors;
     formData.doctorId = selectedDoctor;
@@ -174,7 +150,7 @@ export default function RegForm() {
     formData.antenatalOrPostnatal = antenatal ? 'Antenatal' : 'Postnatal';
 
     try {
-      const response = await fetch('http://localhost:8080/referrals', {
+      const response = await fetch('http://localhost:8080/referrals/byDoctor', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -182,26 +158,22 @@ export default function RegForm() {
         credentials: 'include',
         body: JSON.stringify(formData),
       });
-      console.log(response);
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      handleNextStep();
+
       alert('Data submitted successfully');
+      handleNextStep();
     } catch (error) {
       console.error('Error Submit Data:', error);
     }
-
-    console.log({ ...formData});
   };
 
-  const [startDate, setStartDate] = useState(null);
-  const isWeekday = (date) => {
-    const daten= new Date(date);
-    const day = date.getDay();
-    return day !== 0 && day !== 6;
-  };
+  if (formData.name === '') {
+
+  }
+
 
   return (
     <div className="flex-1 flex-col overflow-auto ">
@@ -211,56 +183,7 @@ export default function RegForm() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {step === 1 && (
               <>
-                <div className="mb-4">
-                
-                  <label className="block text-gray-700 capitalize">NIC</label>
-                  <input
-                    type="text"
-                    name="nic"
-                    value={formData.nic}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 p-2 rounded w-full"
-                    required
-                  />
-                  <label className="block text-gray-700 capitalize">Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 p-2 rounded w-full"
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 capitalize">Antenatal or Postnatal</label>
-                  <div className="flex space-x-4">
-                    <label>
-                      <input
-                        type="radio"
-                        name="antenatal"
-                        value="antenatal"
-                        checked={antenatal === true}
-                        onChange={() => setAntenatal(true)}
-                        className="mr-2"
-                        required
-                      />
-                      Antenatal
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name="antenatal"
-                        value="postnatal"
-                        checked={antenatal === false}
-                        onChange={() => setAntenatal(false)}
-                        className="mr-2"
-                        required
-                      />
-                      Postnatal
-                    </label>
-                  </div>
-                </div>
+                <CheckUser formData={formData} setFormData={setFormData} setAntenatal={setAntenatal} />
               </>
             )}
 
@@ -418,77 +341,75 @@ export default function RegForm() {
             {step === 3 && (
               <>
               <div className="mb-4">
-              <label className="block text-gray-700 capitalize">Select Doctor</label>
-              <select
-                name="doctor"
-                value={selectedDoctor}
-                onChange={handleDoctorChange}
-                className="border border-gray-300 p-2 rounded w-full"
-                required
-              >
-                <option value="">Select a Doctor</option>
-                {doctors.map((doctor) => (
-                  <option key={doctor.id} value={doctor.username}>
-                    {doctor.first_name} {doctor.last_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            {selectedDoctor && (
-              <div className="mb-4">
-                <label className="block text-gray-700 capitalize">Select Date</label>
-                <DayPicker
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={setSelectedDate}
-                  filterDate={isWeekday}
-                  disabledDays={{ 
-                    daysOfWeek: [0, 1, 2, 3, 4, 5, 6].filter(day => !isDateSelectable(new Date().setDate(day))) // Disable days that are not selectable
-                  }}
-                  modifiersClassNames={{ disabled: 'bg-gray-300 text-gray-500' }} // Custom styles for disabled dates
+                <label className="block text-gray-700 capitalize">Select Doctor</label>
+                <select
+                  name="doctor"
+                  value={selectedDoctor.doctorId}
+                  onChange={handleDoctorChange}
                   className="border border-gray-300 p-2 rounded w-full"
-                />
+                  required
+                >
+                  <option value="">Select a Doctor</option>
+                  {doctors.map((doctor) => (
+                    <option key={doctor.doctorId} value={doctor.doctorUsername}>
+                      {doctor.doctorName}
+                    </option>
+                  ))}
+                </select>
               </div>
-            )}
+            
+              {selectedDoctor && (
+                <div className="mb-4">
+                  <label className="block text-gray-700 capitalize w-full">Select Date</label>
+                  
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={(date) => setSelectedDate(date)}
+                    filterDate={isDateSelectable}
+                    dateFormat="yyyy-MM-dd"
+                    className="border border-gray-300 p-2 rounded w-full"
+                    required
+                  />
+                </div>
+              )}
             </>
             )}
 
-            <div className="flex justify-between mt-4">
-              {step > 1 && step < 4 && (
-                <button
-                  type="button"
-                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
-                  onClick={handlePreviousStep}
-                >
-                  Previous
-                </button>
-              )}
-              {step < 3 &&(
-                <button
-                  type="button"
-                  className="bg-blue-500 text-white px-4 py-2 rounded"
-                  onClick={handleNextStep}
-                >
-                  Next
-                </button>
-              )}
-              {step === 3 &&(
-                <>
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded"
-                  onSubmit={handleSubmit}
-                >
-                  Submit
-                </button>
-                </>
-              )}
-              {step === 4 && (
-                  <PdfGenerator data={formData} isAntenatal={antenatal} />
-                )
-              }
-            </div>
+            {  (
+              <div className="flex justify-between mt-4">
+                {step > 1 && step < 4 && (
+                  <button
+                    type="button"
+                    className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
+                    onClick={handlePreviousStep}
+                  >
+                    Previous
+                  </button>
+                )}
+                {step < 3 && (
+                  <button
+                    type="button"
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                    onClick={handleNextStep}
+                  >
+                    Next
+                  </button>
+                )}
+                {step === 3 && (
+                  <>
+                    <button
+                      type="submit"
+                      className="bg-blue-500 text-white px-4 py-2 rounded"
+                      onSubmit={handleSubmit}
+                    >
+                      Submit
+                    </button>
+                  </>
+                )}
+                {step === 4 && <PdfGenerator data={formData} isAntenatal={antenatal} />}
+              </div>
+            )}
+
           </form>
         </div>
       </div>

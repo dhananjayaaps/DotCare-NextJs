@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const CheckUser = () => {
-  const [formData, setFormData] = useState({ nic: "", name: "", status: "" });
-  const [antenatal, setAntenatal] = useState(true); // True for antenatal, false for postnatal
+const CheckUser = ({ formData, setFormData, setAntenatal }) => {
   const [error, setError] = useState("");
   const [userdata, setUserData] = useState(true);
 
@@ -13,40 +11,37 @@ const CheckUser = () => {
 
   const checkMotherDetails = async () => {
     try {
+      const response = await axios.get(
+        `http://localhost:8080/mother/${formData.nic}`,
+        { withCredentials: true }
+      );
 
-        const response = await axios.get(
-            `http://localhost:8080/mother/${formData.nic}`,
-            { withCredentials: true }
-            );
-      
       if (response.data) {
         setFormData({
           ...formData,
           name: response.data.name,
-          status: response.data.status,
+        //   antenatalOrPostnatal: response.data.status === "Antenatal" ? "Antenatal" : "Postnatal",
         });
-        setError('')
-
-        if (response.data.status === "antenatal") {
-          setAntenatal(true);
-        } else if (response.data.status === "postnatal") {
-          setAntenatal(false);
-        }
+        setError("");
       } else {
-        // clearForm();
-        setUserData(false)
+        setUserData(false);
       }
     } catch (err) {
       setError("No details found for this NIC.");
-    //   clearForm();
-      setUserData(false)
+      setUserData(false);
     }
   };
 
-  const clearForm = () => {
-    setFormData({ nic: "", name: "", status: "" });
-    setAntenatal(true); // Default to antenatal
+  const ChangeCheckBox = (value) => {
+    setFormData({
+      ...formData,
+      antenatalOrPostnatal: value ? "Antenatal" : "Postnatal",
+    });
+    // handle setAntenatal
+    setAntenatal(value);
   };
+
+  console.log(formData);
 
   return (
     <>
@@ -55,7 +50,7 @@ const CheckUser = () => {
         <input
           type="text"
           name="nic"
-          value={formData.nic}
+          value={formData.nic || ''}
           onChange={handleInputChange}
           className="border border-gray-300 p-2 rounded w-full"
           required
@@ -69,7 +64,7 @@ const CheckUser = () => {
         </button>
         {error && <p className="text-red-500">{error}</p>}
       </div>
-      
+
       <div className="mb-4">
         <label className="block text-gray-700 capitalize">Name</label>
         <input
@@ -81,17 +76,19 @@ const CheckUser = () => {
           required
         />
       </div>
-      
+
       <div className="mb-4">
-        <label className="block text-gray-700 capitalize">Antenatal or Postnatal</label>
+        <label className="block text-gray-700 capitalize">
+          Antenatal or Postnatal
+        </label>
         <div className="flex space-x-4">
           <label>
             <input
               type="radio"
-              name="antenatal"
-              value="prenatal"
-              checked={antenatal === true}
-              onChange={() => setAntenatal(true)}
+              name="antenatalOrPostnatal"
+              value="Antenatal"
+              checked={formData.antenatalOrPostnatal === "Antenatal"}
+              onChange={() => ChangeCheckBox(true)}
               className="mr-2"
             />
             Antenatal
@@ -99,10 +96,10 @@ const CheckUser = () => {
           <label>
             <input
               type="radio"
-              name="antenatal"
-              value="postnatal"
-              checked={antenatal === false}
-              onChange={() => setAntenatal(false)}
+              name="antenatalOrPostnatal"
+              value="Postnatal"
+              checked={formData.antenatalOrPostnatal === "Postnatal"}
+              onChange={() => ChangeCheckBox(false)}
               className="mr-2"
             />
             Postnatal
