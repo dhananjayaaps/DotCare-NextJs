@@ -1,9 +1,11 @@
-'use client'
-import React, { useState, useEffect } from "react";
+'use client';
+
+import React, { useState, useEffect, Suspense } from "react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function EnterNewPassword() {
+// export default function EnterNewPassword() {
+const EnterNewPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -103,3 +105,12 @@ export default function EnterNewPassword() {
     </div>
   );
 }
+
+
+const Page = () => (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EnterNewPassword />
+    </Suspense>
+);
+
+export default Page;

@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -13,6 +14,8 @@ export default function SignUp() {
     phoneNumber: '',
     marketing_accept: false,
   });
+
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -35,7 +38,8 @@ export default function SignUp() {
 
       if (response.ok) {
         const data = await response.json();
-        alert('Account created successfully');
+        // alert('Account created successfully');
+        router.push('/auth/otpsend');
         console.log(data);
       } else {
         const errorData = await response.json();
