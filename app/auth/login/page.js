@@ -17,10 +17,12 @@ export default function LogIn() {
     });
   };
 
+  const router = useRouter();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {
+      const response = await fetch(`${process.env.BACKEND_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,7 +45,7 @@ export default function LogIn() {
       console.log("Login successful, token saved in cookies.");
       alert('Log In successfully');
 
-      const router = useRouter();
+      
       // Redirect based on roles
       if (roles.includes('ROLE_ADMIN')) {
         router.push('/admin/admins');
@@ -60,7 +62,7 @@ export default function LogIn() {
 
     } catch (error) {
       console.error(error);
-      alert('An error occurred while logging into the account.');
+      alert('An error occurred while logging into the account.'+error);
     }
   };
 
