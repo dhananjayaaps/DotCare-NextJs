@@ -39,7 +39,7 @@ export default function LogIn() {
         return; // Exit if there's an error
       }
 
-      const { jwtToken, roles } = await response.json(); // Use await to parse JSON response
+      const { token, roles } = await response.json(); // Use await to parse JSON response
       Cookies.set("jwtToken", jwtToken, { expires: 7 });
 
       console.log("Login successful, token saved in cookies.");
