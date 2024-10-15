@@ -12,7 +12,7 @@ const CheckUser = ({ formData, setFormData, setAntenatal }) => {
   const checkMotherDetails = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/mother/${formData.nic}`,
+        `${process.env.BACKEND_URL}/mother/${formData.nic}`,
         { withCredentials: true }
       );
 

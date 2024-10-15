@@ -20,7 +20,7 @@ const EnterNewPassword = () => {
     const verifyToken = async () => {
       try {
         // Send request to verify the token
-        await axios.get(`http://localhost:8080/reset-password/verify?token=${token}`);
+        await axios.get(`${process.env.BACKEND_URL}/reset-password/verify?token=${token}`);
         setIsTokenValid(true);  // Token is valid
       } catch (error) {
         setMessage("Invalid or expired token.");
@@ -46,7 +46,7 @@ const EnterNewPassword = () => {
     }
 
     try {
-      await axios.post("http://localhost:8080/reset-password/reset", {
+      await axios.post(`${process.env.BACKEND_URL}/reset-password/reset`, {
         token,
         password,
         confirmPassword,

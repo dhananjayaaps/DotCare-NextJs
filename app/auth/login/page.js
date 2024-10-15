@@ -16,10 +16,12 @@ export default function LogIn() {
     });
   };
 
+  console.log(process.env.BACKEND_URL);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/auth/login', {
+      const response = await fetch(process.env.BACKEND_URL+`/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,8 +53,8 @@ export default function LogIn() {
         alert('Failed to login to account: ' + errorData.message);
       }
     } catch (error) {
-      console.error('Error creating account:', error);
-      alert('An error occurred while creating the account.');
+      // console.error('Error creating account:', error);
+      alert('An error occurred while login the account.');
     }
   };
   

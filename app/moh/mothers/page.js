@@ -54,7 +54,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   const fetchRiskFactors = async (id) => {
     setRiskLoading(true);
     try {
-      const response = await fetch(`http://localhost:8080/mother/getRFandMomById?id=${id}`, {
+      const response = await fetch(`${process.env.BACKEND_URL}/mother/getRFandMomById?id=${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     const fetchAppointments = async () => {
       setLoading(false);
       try {
-        const response = await fetch('http://localhost:8080/mother/moh', {
+        const response = await fetch(`${process.env.BACKEND_URL}/mother/moh`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -309,7 +309,7 @@ const AddRiskFactorForm = ({ nic, setAddRFwindow }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/referrals/addRiskFactor', {
+      const response = await fetch(`${process.env.BACKEND_URL}/referrals/addRiskFactor`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

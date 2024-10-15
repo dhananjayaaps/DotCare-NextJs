@@ -13,7 +13,7 @@ const Sidemenu = ({ highlightedItem , loggedUser}) => {
   
   const logout = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/auth/logout`, {
+      const response = await fetch(`${process.env.BACKEND_URL}/auth/logout`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

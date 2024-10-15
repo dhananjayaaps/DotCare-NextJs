@@ -14,7 +14,7 @@ export default function RequestReset() {
     e.preventDefault();
     setIsLoading(true); // Set loading to true when the request is submitted
     try {
-      await axios.post("http://localhost:8080/reset-password/request", { email });
+      await axios.post(`${process.env.BACKEND_URL}/reset-password/request`, { email });
       setMessage("Check your email for a reset link.");
     } catch (error) {
       setMessage("Error occurred, please try again.");

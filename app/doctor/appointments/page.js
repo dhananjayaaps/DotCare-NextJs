@@ -79,7 +79,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   const fetchRiskFactors = async (id) => {
     setRiskLoading(true);
     try {
-      const response = await fetch(`http://localhost:8080/referrals/getRFandMomById?id=${id}`, {
+      const response = await fetch(`${process.env.BACKEND_URL}/referrals/getRFandMomById?id=${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

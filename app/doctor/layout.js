@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/auth/getUser`, {
+        const response = await fetch(`${process.env.BACKEND_URL}/auth/getUser`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

@@ -17,7 +17,7 @@ const EmailVerify = () => {
     const verifyToken = async () => {
       try {
         // Send the verification request
-        const response = await axios.get(`http://localhost:8080/auth/verify?token=${token}`);
+        const response = await axios.get(`${process.env.BACKEND_URL}/auth/verify?token=${token}`);
         
           setMessage("Your email has been successfully verified!");
           setIsError(false);

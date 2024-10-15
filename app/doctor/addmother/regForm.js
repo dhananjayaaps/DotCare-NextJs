@@ -22,7 +22,7 @@ export default function RegForm() {
     // Fetch list of doctors from API
     const fetchDoctors = async () => {
       try {
-        const response = await fetch('http://localhost:8080/clinics/listMoh', {
+        const response = await fetch(`${process.env.BACKEND_URL}clinics/listMoh`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ export default function RegForm() {
     formData.antenatalOrPostnatal = antenatal ? 'Antenatal' : 'Postnatal';
 
     try {
-      const response = await fetch('http://localhost:8080/referrals/byDoctor', {
+      const response = await fetch(`${process.env.BACKEND_URL}/referrals/byDoctor`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

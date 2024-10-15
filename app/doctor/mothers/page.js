@@ -309,7 +309,7 @@ const AddRiskFactorForm = ({ nic, setAddRFwindow }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/referrals/addRiskFactor', {
+      const response = await fetch(`${process.env.BACKEND_URL}/referrals/addRiskFactor`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
