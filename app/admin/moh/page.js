@@ -36,7 +36,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     // Fetch data from the API
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/roles/byrole?role=Moh', {
+        const response = await fetch(`${process.env.BACKEND_URL}/roles/byrole?role=Moh`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     // console.log(`User ${currentUser.first_name} ${currentUser.last_name} will be ${currentAction}`);
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/roles/deleteRole', {
+        const response = await fetch(`${process.env.BACKEND_URL}/roles/deleteRole`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

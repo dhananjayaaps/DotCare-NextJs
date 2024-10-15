@@ -37,7 +37,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     // Fetch clinics
     const fetchClinics = async () => {
       try {
-        const response = await fetch('http://localhost:8080/clinics', {
+        const response = await fetch(`${process.env.BACKEND_URL}/clinics`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     // Fetch MOH users
     const fetchMohUsers = async () => {
       try {
-        const response = await fetch('http://localhost:8080/roles/byrole?role=moh', {
+        const response = await fetch(`${process.env.BACKEND_URL}/roles/byrole?role=moh`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
 
   const handleSaveUpdate = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/clinics/${currentClinic.id}`, {
+      const response = await fetch(`${process.env.BACKEND_URL}/clinics/${currentClinic.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -120,7 +120,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     if (actionType === 'delete') {
       // Perform the delete action
       try {
-        const response = await fetch(`http://localhost:8080/clinics/${currentClinic.id}`, {
+        const response = await fetch(`${process.env.BACKEND_URL}clinics/${currentClinic.id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

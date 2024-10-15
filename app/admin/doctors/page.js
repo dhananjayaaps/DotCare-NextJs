@@ -44,7 +44,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     // Fetch users with the Doctor role
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:8080/roles/byrole?role=Doctor', {
+        const response = await fetch(`${process.env.BACKEND_URL}/roles/byrole?role=Doctor`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     if (currentUser) {
       const fetchDays = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/doctordates/byId?id=${currentUser.id}`, {
+          const response = await fetch(`${process.env.BACKEND_URL}/doctordates/byId?id=${currentUser.id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
 
   const handleConfirmDelete = async () => {
     try {
-      const response = await fetch('http://localhost:8080/roles/deleteRole', {
+      const response = await fetch(`${process.env.BACKEND_URL}/roles/deleteRole`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
       const selectedDays = days.filter((day) => day.selected).map((day) => day.number);
       
       // Send the request with the correct payload format
-      const response = await fetch('http://localhost:8080/doctordates', {
+      const response = await fetch(`${process.env.BACKEND_URL}/doctordates`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
