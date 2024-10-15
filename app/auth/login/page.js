@@ -1,6 +1,7 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie'; // Ensure you have imported js-cookie for handling cookies
 
 export default function LogIn() {
   const [formData, setFormData] = useState({
@@ -16,12 +17,10 @@ export default function LogIn() {
     });
   };
 
-  console.log(process.env.BACKEND_URL);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(process.env.BACKEND_URL+`/auth/login`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,36 +28,41 @@ export default function LogIn() {
         body: JSON.stringify(formData),
         credentials: 'include',
       });
-  
-      if (response.ok) {
-        const data = await response.json();
-        alert('Log In successfully');
 
-        if (data.roles.includes('ROLE_ADMIN')) {
-          router.push('/admin/admins');
-        } else if (data.roles.includes('ROLE_DOCTOR')) {
-          router.push('/doctor/appointments');
-        } else if (data.roles.includes('ROLE_MOH')) {
-          router.push('/moh/addMother');
-        } else if (data.roles.includes('ROLE_USER')) {
-          alert('Contact Admin for the assign roles');
-          router.push('/');
-        }
-
-        console.log(data);
-
-      } else {
+      // Check if the response is ok (status in the range 200-299)
+      if (!response.ok) {
         const errorData = await response.json();
         console.log(errorData);
         alert('Failed to login to account: ' + errorData.message);
+        return; // Exit if there's an error
       }
+
+      const { jwtToken, roles } = await response.json(); // Use await to parse JSON response
+      Cookies.set("jwtToken", jwtToken, { expires: 7 });
+
+      console.log("Login successful, token saved in cookies.");
+      alert('Log In successfully');
+
+      const router = useRouter();
+      // Redirect based on roles
+      if (roles.includes('ROLE_ADMIN')) {
+        router.push('/admin/admins');
+      } else if (roles.includes('ROLE_DOCTOR')) {
+        router.push('/doctor/appointments');
+      } else if (roles.includes('ROLE_MOH')) {
+        router.push('/moh/addMother');
+      } else if (roles.includes('ROLE_USER')) {
+        alert('Contact Admin for the assign roles');
+        router.push('/');
+      }
+
+      console.log({ roles }); // Log roles for debugging
+
     } catch (error) {
-      // console.error('Error creating account:', error);
-      alert('An error occurred while login the account.');
+      console.error(error);
+      alert('An error occurred while logging into the account.');
     }
   };
-  
-  const router = useRouter();
 
   return (
     <div>
@@ -91,9 +95,8 @@ export default function LogIn() {
               </h1>
 
               <form onSubmit={handleSubmit} className="mt-8 gap-6 pt-10 flex flex-col">
-
                 <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="Email" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="Username" className="block text-sm font-medium text-gray-700">
                     Username
                   </label>
 
@@ -104,6 +107,7 @@ export default function LogIn() {
                     value={formData.username}
                     onChange={handleChange}
                     className="h-10 mt-1 w-full rounded-md border border-gray-300 bg-white text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                    required // Make the field required
                   />
                 </div>
 
@@ -119,6 +123,7 @@ export default function LogIn() {
                     value={formData.password}
                     onChange={handleChange}
                     className="h-10 mt-1 w-full rounded-md border border-gray-300 bg-white text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                    required // Make the field required
                   />
                 </div>
 
@@ -131,11 +136,17 @@ export default function LogIn() {
                   </button>
 
                   <p className="mt-4 text-sm text-gray-500 sm:mt-0">
-                    Already have an account?
+                    Already have an account? {' '}
                     <a href="/auth/signup" className="text-gray-700 underline">
                       Sign Up
                     </a>
                     .
+                  </p>
+                  <br />
+                  <p className="mt-4 text-sm text-gray-500 sm:mt-0">
+                    <a href="/auth/reset-password" className="text-gray-700 underline">
+                      Forgot your password?
+                    </a>
                   </p>
                 </div>
               </form>

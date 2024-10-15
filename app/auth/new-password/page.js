@@ -53,6 +53,7 @@ const EnterNewPassword = () => {
       });
       router.push("/auth/reset-success");
     } catch (error) {
+        alert('An error occurred while resetting the password.'+error);
       setMessage("Error occurred, please try again.");
     }
   };
