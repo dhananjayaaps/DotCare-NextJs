@@ -12,7 +12,7 @@ const Sidemenu = ({ highlightedItem, loggedUser}) => {
 
   const logout = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/auth/logout`, {
+      const response = await fetch(`${process.env.BACKEND_URL}/auth/logout`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -74,14 +74,14 @@ const Sidemenu = ({ highlightedItem, loggedUser}) => {
               </a>
             </li>
 
-            <li>
+            {/* <li>
               <a
                 href="/admin/midwifes"
                 className={`block rounded-lg px-4 py-2 text-sm font-medium ${isActive('midwifes')} hover:bg-gray-100 hover:text-gray-700`}
               >
                 Miwifes
               </a>
-            </li>
+            </li> */}
 
             <li>
               <a
