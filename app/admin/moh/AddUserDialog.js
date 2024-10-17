@@ -16,7 +16,7 @@ const AddUserDialog = ({ showAddDialog, setShowAddDialog }) => {
   const handleCheckUser = async () => {
     try {
       setUserData(null);
-      const response = await axios.get('http://localhost:8080/roles/check', {
+      const response = await axios.get(`${process.env.BACKEND_URL}//roles/check`, {
         headers: {
           'Content-Type': 'application/json',
         },

@@ -203,7 +203,7 @@ export default function SignUp() {
                   />
                 </div>
 
-                <div className="col-span-6">
+                {/* <div className="col-span-6">
                   <label htmlFor="MarketingAccept" className="flex gap-4">
                     <input
                       type="checkbox"
@@ -218,7 +218,7 @@ export default function SignUp() {
                       I want to receive emails about events, product updates, and company announcements.
                     </span>
                   </label>
-                </div>
+                </div> */}
 
                 <div className="col-span-6">
                   <p className="text-sm text-gray-500">

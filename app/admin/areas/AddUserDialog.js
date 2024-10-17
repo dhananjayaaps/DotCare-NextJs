@@ -20,7 +20,7 @@ const AddUserDialog = ({ showAddDialog, setShowAddDialog, mohUsers }) => {
         mohUsername: selectedMoh.username || null,
       };
 
-      const response = await fetch('http://localhost:8080/clinics', {
+      const response = await fetch(`${process.env.BACKEND_URL}/clinics`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
