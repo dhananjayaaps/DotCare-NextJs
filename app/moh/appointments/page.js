@@ -6,6 +6,7 @@ import NavBar from '@/app/components/NavBar';
 import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/react';
 import AddAppointmentDialog from './AddAppointmentDialog';
+import { getBirthdayFromNIC } from "../../utils/getbdfromnic";
 
 // Mother Component
 export default function Mother() {
@@ -276,6 +277,17 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
               <div className="mb-4">
                 <p>
                   <strong>Antenatal/Postnatal:</strong> {motherDetails.antenatalOrPostnatal}
+                </p>
+                <p>
+                  <strong>DOB:</strong> {
+                    (() => {
+                      try {
+                        return getBirthdayFromNIC(motherDetails.nic) || 'N/A';
+                      } catch (e) {
+                        return 'N/A';
+                      }
+                    })()
+                  }
                 </p>
                 {/* Display Mother Details */}
                 {motherDetails.antenatalOrPostnatal === 'Antenatal'  && (<><p>

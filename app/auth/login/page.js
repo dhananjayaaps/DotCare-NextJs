@@ -52,7 +52,7 @@ export default function LogIn() {
       } else if (roles.includes('ROLE_DOCTOR')) {
         router.push('/doctor/appointments');
       } else if (roles.includes('ROLE_MOH')) {
-        router.push('/moh/addMother');
+        router.push('/moh/addmother');
       } else if (roles.includes('ROLE_USER')) {
         alert('Contact Admin for the assign roles');
         router.push('/');

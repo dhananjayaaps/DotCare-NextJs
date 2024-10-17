@@ -22,7 +22,7 @@ export default function RegForm() {
     // Fetch list of doctors from API
     const fetchDoctors = async () => {
       try {
-        const response = await fetch(`${process.env.BACKEND_URL}clinics/listMoh`, {
+        const response = await fetch(`${process.env.BACKEND_URL}/clinics/listMoh`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -94,6 +94,7 @@ export default function RegForm() {
     channelDate: '',
     name: '',
     doctorName: '',
+    dob: ''
   });
 
   const calculatepog = (edd) => {
@@ -148,6 +149,11 @@ export default function RegForm() {
     formData.doctorId = selectedDoctor;
     formData.channelDate = selectedDate.toISOString().slice(0, 10);
     formData.antenatalOrPostnatal = antenatal ? 'Antenatal' : 'Postnatal';
+
+    if(formData.name === '' && formData.nic === '') {
+      alert('Please enter the NIC number and click on the check button');
+      return
+    }
 
     try {
       const response = await fetch(`${process.env.BACKEND_URL}/referrals/byDoctor`, {

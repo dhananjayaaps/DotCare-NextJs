@@ -30,6 +30,7 @@ const PdfGenerator = ({ data, isAntenatal }) => {
     referralData = [
       { label: 'NIC', value: data.nic },
       { label: 'Name', value: data.name },
+      { label: 'Date of birth', value: data.dob },
       { label: 'Antenatal or Postnatal', value: data.antenatalOrPostnatal },
       ...referralData,
       { label: 'Parity - Gravidity', value: data.parityGravidity ? 'Yes' : 'No' },

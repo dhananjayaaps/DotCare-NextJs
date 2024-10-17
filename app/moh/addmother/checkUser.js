@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { getBirthdayFromNIC } from "../../utils/getbdfromnic";
 
 const CheckUser = ({ formData, setFormData, setAntenatal }) => {
   const [error, setError] = useState("");
@@ -12,15 +13,16 @@ const CheckUser = ({ formData, setFormData, setAntenatal }) => {
   const checkMotherDetails = async () => {
     try {
       const response = await axios.get(
-        `${process.env.BACKEND_URL}/${formData.nic}`,
+        `${process.env.BACKEND_URL}/mother/${formData.nic}`,
         { withCredentials: true }
       );
 
       if (response.data) {
+        const dob = getBirthdayFromNIC(formData.nic);
         setFormData({
           ...formData,
           name: response.data.name,
-        //   antenatalOrPostnatal: response.data.status === "Antenatal" ? "Antenatal" : "Postnatal",
+          dob: dob,
         });
         setError("");
       } else {
@@ -29,6 +31,11 @@ const CheckUser = ({ formData, setFormData, setAntenatal }) => {
     } catch (err) {
       setError("No details found for this NIC.");
       setUserData(false);
+      const dob = getBirthdayFromNIC(formData.nic);
+      setFormData({
+        ...formData,
+        dob: dob,
+      });
     }
   };
 
@@ -37,7 +44,6 @@ const CheckUser = ({ formData, setFormData, setAntenatal }) => {
       ...formData,
       antenatalOrPostnatal: value ? "Antenatal" : "Postnatal",
     });
-    // handle setAntenatal
     setAntenatal(value);
   };
 
@@ -50,7 +56,7 @@ const CheckUser = ({ formData, setFormData, setAntenatal }) => {
         <input
           type="text"
           name="nic"
-          value={formData.nic || ''}
+          value={formData.nic || ""}
           onChange={handleInputChange}
           className="border border-gray-300 p-2 rounded w-full"
           required
@@ -70,10 +76,22 @@ const CheckUser = ({ formData, setFormData, setAntenatal }) => {
         <input
           type="text"
           name="name"
-          value={formData.name}
+          value={formData.name || ""}
           onChange={handleInputChange}
           className="border border-gray-300 p-2 rounded w-full"
           required
+        />
+      </div>
+
+      {/* Date of Birth Field */}
+      <div className="mb-4">
+        <label className="block text-gray-700 capitalize">Date of Birth</label>
+        <input
+          type="text"
+          name="dob"
+          value={formData.dob || ""}
+          readOnly
+          className="border border-gray-300 p-2 rounded w-full"
         />
       </div>
 
