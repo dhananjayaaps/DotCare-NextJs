@@ -90,7 +90,6 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
         const result = await response.json();
         if (result.success) {
           console.log("Successfull removed role from " + currentUser.username);
-          window.location.reload();
         }
       } catch (error) {
         console.error('Error Delete Data:', error);

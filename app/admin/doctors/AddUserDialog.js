@@ -39,7 +39,7 @@ const AddUserDialog = ({ showAddDialog, setShowAddDialog }) => {
       formData.role = 'doctor'
       console.log(formData)
 
-      const response =  await fetch(`${process.env.BACKEND_URL}//roles/addRole`, {
+      const response =  await fetch(`${process.env.BACKEND_URL}/roles/addRole`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -50,6 +50,7 @@ const AddUserDialog = ({ showAddDialog, setShowAddDialog }) => {
 
       if (response.status === 200) {
         alert('Role added succesfully')
+        window.location.reload();
         setUserData({});
       } else {
         alert('Failed to add role');

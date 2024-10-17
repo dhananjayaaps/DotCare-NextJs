@@ -16,7 +16,7 @@ const AddUserDialog = ({ showAddDialog, setShowAddDialog }) => {
   const handleCheckUser = async () => {
     try {
       setUserData(null);
-      const response = await axios.get(`${process.env.BACKEND_URL}//roles/check`, {
+      const response = await axios.get(`${process.env.BACKEND_URL}/roles/check`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -51,6 +51,7 @@ const AddUserDialog = ({ showAddDialog, setShowAddDialog }) => {
       if (response.status === 200) {
         alert('Role added succesfully')
         setUserData({});
+        window.location.reload();
       } else {
         alert('Failed to add role');
       }

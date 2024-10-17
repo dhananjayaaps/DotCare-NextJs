@@ -117,10 +117,11 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
 
 
   const handleConfirmAction = async () => {
-    if (actionType === 'delete') {
+    console.log(`Performing ${actionType} action on clinic ${currentClinic.id}...`);
+    if (actionType == 'delete') {
       // Perform the delete action
       try {
-        const response = await fetch(`${process.env.BACKEND_URL}clinics/${currentClinic.id}`, {
+        const response = await fetch(`${process.env.BACKEND_URL}/clinics/${currentClinic.id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -135,13 +136,13 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
         const result = await response.json();
         if (result.success) {
           console.log(`Clinic ${currentClinic.name} successfully deleted.`);
+          window.location.reload();
           setClinics(clinics.filter(clinic => clinic.id !== currentClinic.id)); // Remove from UI
         }
       } catch (error) {
         console.error('Error deleting clinic:', error);
       }
     } else if (actionType === 'update') {
-      // Redirect to the update page or handle update logic here
       console.log(`Updating clinic ${currentClinic.name}...`);
     }
 
