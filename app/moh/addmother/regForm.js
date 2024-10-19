@@ -15,8 +15,9 @@ export default function RegForm() {
 
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState('');
-  const [assignedDates, setAssignedDates] = useState([]);
+  const [assignedDates, setAssignedDates] = useState();
   const [selectedDate, setSelectedDate] = useState();
+  const [formattedDate, setFormattedDate] = useState('');
 
   useEffect(() => {
     // Fetch list of doctors from API
@@ -171,12 +172,39 @@ export default function RegForm() {
     setRiskFactors(riskFactors.filter((_, i) => i !== index));
   };
 
+  useEffect(() => {
+    console.log('Updated selectedDate:', selectedDate);
+  }, [selectedDate]);
+
+  useEffect(() => {
+
+    setFormData({
+      ...formData,  
+      riskFactors: riskFactors,
+      doctorId: selectedDoctor,
+      channelDate: formattedDate, 
+      antenatalOrPostnatal: antenatal ? 'Antenatal' : 'Postnatal', 
+    });
+
+  }, [riskFactors, selectedDoctor, formattedDate, antenatal]);
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+  
+
+  const setSelectedDateLogic = (date) => {
+  
+    const options = { timeZone: 'Asia/Colombo', year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDateString = new Intl.DateTimeFormat('en-CA', options).format(date);
+
+    setSelectedDate(date);
+    setFormattedDate(formattedDateString);
+
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    formData.riskFactors = riskFactors;
-    formData.doctorId = selectedDoctor;
-    formData.channelDate = selectedDate.toISOString().slice(0, 10);
-    formData.antenatalOrPostnatal = antenatal ? 'Antenatal' : 'Postnatal';
 
     if(formData.name === '' && formData.nic === '') {
       alert('Please enter the NIC number and click on the check button');
@@ -203,10 +231,6 @@ export default function RegForm() {
       console.error('Error Submit Data:', error);
     }
   };
-
-  if (formData.name === '') {
-
-  }
 
 
   return (
@@ -398,7 +422,7 @@ export default function RegForm() {
                   
                   <DatePicker
                     selected={selectedDate}
-                    onChange={(date) => setSelectedDate(date)}
+                    onChange={(date) => setSelectedDateLogic(date)}
                     filterDate={isDateSelectable}
                     dateFormat="yyyy-MM-dd"
                     className="border border-gray-300 p-2 rounded w-full"

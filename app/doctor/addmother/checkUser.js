@@ -13,18 +13,35 @@ const CheckUser = ({ formData, setFormData, setAntenatal }) => {
   const checkMotherDetails = async () => {
     try {
       const response = await axios.get(
-        `${process.env.BACKEND_URL}/mother/${formData.nic}`,
+        `${process.env.BACKEND_URL}/mother/details/${formData.nic}`,
         { withCredentials: true }
       );
 
       if (response.data) {
         const dob = getBirthdayFromNIC(formData.nic);
-        setFormData({
-          ...formData,
-          name: response.data.name,
-          dob: dob,
-        });
+
+        if(response.data.referrals[0].antenatalOrPostnatal === "Antenatal"){
+          console.log(response.data.referrals[0].expectedDateOfDelivery);
+          setFormData({
+            ...formData,
+            name: response.data.name,
+            dob: dob,
+            expectedDateOfDelivery: response.data.referrals[0].expectedDateOfDelivery,
+          });
+        }else {
+          console.log(response.data.referrals[0].postnatal_day);
+          setFormData({
+            ...formData,
+            name: response.data.name,
+            dob: dob,
+            postnatal_day: response.data.referrals[0].postnatalDay,
+            birth_weight: response.data.referrals[0].birthWeight,
+            modes_of_delivery: response.data.referrals[0].modesOfDelivery,
+          });
+        }
+
         setError("");
+        console.log(formData);
       } else {
         setUserData(false);
       }
@@ -46,8 +63,6 @@ const CheckUser = ({ formData, setFormData, setAntenatal }) => {
     });
     setAntenatal(value);
   };
-
-  console.log(formData);
 
   return (
     <>
