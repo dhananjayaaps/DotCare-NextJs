@@ -19,10 +19,12 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [currentAction, setCurrentAction] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
-  const [users, setUsers] = useState([]); // State to store the users
+  const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    // Fetch data from the API
     const fetchData = async () => {
       try {
         const response = await fetch(`${process.env.BACKEND_URL}/roles/all`, {
@@ -32,7 +34,6 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
           },
           credentials: 'include',
         });
-        console.log(response);
   
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -41,7 +42,6 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
         const result = await response.json();
         if (result.success) {
           setUsers(result.data);
-          console.log("users are " + users);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -51,15 +51,21 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     fetchData();
   }, []);
 
+  const filteredUsers = users.filter(user =>
+    `${user.first_name} ${user.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const indexOfLastUser = currentPage * itemsPerPage;
+  const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
   const handleDelete = (user) => {
     setCurrentUser(user);
-    console.log(user);
     setShowPopup(true);
   };
 
   const handleConfirmDelete = () => {
-    // Perform the action (e.g., restrict or remove user)
-    // console.log(`User ${currentUser.first_name} ${currentUser.last_name} will be ${currentAction}`);
     const fetchData = async () => {
       try {
         const response = await fetch(`${process.env.BACKEND_URL}/roles/deleteRole`, {
@@ -68,9 +74,8 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
             'Content-Type': 'application/json',
           },
           credentials: 'include',
-          body: JSON.stringify({username: currentUser.username, role: 'admin'}),
+          body: JSON.stringify({ username: currentUser.username, role: 'admin' }),
         });
-        console.log(response);
   
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -78,7 +83,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   
         const result = await response.json();
         if (result.success) {
-          console.log("Successfull removed role from " + currentUser.username);
+          console.log("Successfully removed role from " + currentUser.username);
         }
       } catch (error) {
         console.error('Error Delete Data:', error);
@@ -96,8 +101,20 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     setCurrentAction('');
   };
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div>
+      <input
+        type="text"
+        placeholder="Search users..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="mb-4 px-2 py-1 border rounded"
+      />
+
       <table className="min-w-full bg-white rounded-lg overflow-hidden">
         <thead className="bg-gray-100 border-b border-gray-200">
           <tr>
@@ -106,11 +123,10 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
             <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Username</th>
             <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Contact</th>
             <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-            {/* <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th> */}
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {users.map((user) => (
+          {currentUsers.map((user) => (
             <tr key={user.username}>
               <td className="px-6 py-4 whitespace-no-wrap">
                 <p className="text-sm leading-5 text-gray-900">
@@ -135,18 +151,31 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                   {user.enabled ? 'Active' : 'Inactive'}
                 </span>
               </td>
-              {/* <td className="px-6 py-4 whitespace-no-wrap">
-                <button
-                  className="bg-red-500 text-white px-3 py-1 rounded"
-                  onClick={() => handleDelete(user)}
-                >
-                  Remove
-                </button>
-              </td> */}
             </tr>
           ))}
         </tbody>
       </table>
+
+      {/* Pagination Controls */}
+      <div className="flex justify-between mt-4">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+          className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
+        >
+          Previous
+        </button>
+        <div>
+          Page {currentPage} of {totalPages}
+        </div>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+          className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
+        >
+          Next
+        </button>
+      </div>
 
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -164,12 +193,6 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
               </button>
             </div>
           </div>
-        </div>
-      )}
-
-      {showAddDialog && (
-        <div>
-          <AddUserDialog showAddDialog={showAddDialog} setShowAddDialog={setShowAddDialog} />
         </div>
       )}
     </div>
