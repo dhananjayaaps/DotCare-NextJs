@@ -34,6 +34,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   const [selectedRefferelId, setSelectedRefferelId] = useState('');
   const [addRFwindow, setAddRFwindow] = useState(false);
   const [userNic, setUserNic] = useState(null);
+  const [error, setError] = useState(false); // To handle fetch errors
 
   const handleShowButton = (id) => {
     setSelectedRefferelId(id);
@@ -44,7 +45,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   const handleAddRFButton = (nic) => {
     setUserNic(nic);
     setAddRFwindow(true);
-  }
+  };
 
   const handleCancel = () => {
     setShowRiskFactorsDialog(false);
@@ -63,6 +64,10 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
         credentials: 'include',
       });
 
+      if (!response.ok) {
+        throw new Error('Failed to fetch risk factors');
+      }
+
       const data = await response.json();
       setRiskFactors(data.riskFactors.reverse());
       setMotherDetails(data.referralDTO); // Set mother's details
@@ -78,7 +83,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
 
   useEffect(() => {
     const fetchAppointments = async () => {
-      setLoading(false);
+      setLoading(true);
       try {
         const response = await fetch(`${process.env.BACKEND_URL}/mother/doctor`, {
           method: 'GET',
@@ -88,11 +93,18 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
           credentials: 'include',
         });
 
+        if (!response.ok) {
+          throw new Error('Failed to fetch appointments');
+        }
+
         const data = await response.json();
+        if (data.length === 0) {
+          setError(true);
+        }
         setAppointments(data);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching appointments:', error);
+        setError(true); // Set error flag when an error occurs
       } finally {
         setLoading(false);
       }
@@ -115,21 +127,24 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     )
     .slice(indexOfFirstAppointment, indexOfLastAppointment);
 
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    const handleSearchChange = (e) => {
-      setSearchTerm(e.target.value);
-      setCurrentPage(1); // Reset to first page after search
-    };
-    
-    const handleDateChange = (e) => {
-      setSearchDate(e.target.value);
-      setCurrentPage(1); // Reset to first page after search
-    };
-    
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page after search
+  };
+
+  const handleDateChange = (e) => {
+    setSearchDate(e.target.value);
+    setCurrentPage(1); // Reset to first page after search
+  };
 
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error || appointments.length === 0) {
+    return <div>No mothers found</div>;
   }
 
   return (
