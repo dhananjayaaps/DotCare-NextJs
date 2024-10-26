@@ -222,11 +222,12 @@ export default function SignUp() {
 
                 <div className="col-span-6">
                   <p className="text-sm text-gray-500">
-                    By creating an account, you agree to our
+
+                    By creating an account, you agree to our{' '}
                     <a href="#" className="text-gray-700 underline">
-                      terms and conditions
+                      terms and conditions{' '}
                     </a>
-                    and
+                    and{' '}
                     <a href="#" className="text-gray-700 underline">
                       privacy policy
                     </a>
@@ -243,7 +244,7 @@ export default function SignUp() {
                   </button>
 
                   <p className="mt-4 text-sm text-gray-500 sm:mt-0">
-                    Already have an account?
+                    Already have an account?{' '}
                     <a href="/auth/login" className="text-gray-700 underline">
                       Log in
                     </a>

@@ -15,7 +15,7 @@ export default function RegForm() {
 
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState('');
-  const [assignedDates, setAssignedDates] = useState();
+  const [assignedDates, setAssignedDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState();
   const [formattedDate, setFormattedDate] = useState('');
 

@@ -1,7 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie'; // Ensure you have imported js-cookie for handling cookies
+import Cookies from 'js-cookie';
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 
 export default function LogIn() {
   const [formData, setFormData] = useState({
@@ -43,9 +45,9 @@ export default function LogIn() {
       Cookies.set("jwtToken", token, { expires: 7 });
 
       console.log("Login successful, token saved in cookies.");
-      alert('Log In successfully');
+      // alert('Log In successfully');
+      Toastify({text: "Log In successfully"}).showToast();
 
-      
       // Redirect based on roles
       if (roles.includes('ROLE_ADMIN')) {
         router.push('/admin/admins');
