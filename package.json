@@ -18,6 +18,7 @@
     "jspdf": "^2.5.1",
     "next": "14.2.4",
     "nookies": "^2.5.2",
+    "pm2": "^5.4.2",
     "postcss-loader": "^8.1.1",
     "react": "^18",
     "react-datepicker": "^7.3.0",
