@@ -31,7 +31,58 @@ export function getBirthdayFromNIC(nic) {
   
     // Calculate the birth date from the year and day of year
     const birthDate = new Date(year, 0); // January 1st of the year
-    birthDate.setDate(dayOfYear);
+    // birthDate.setDate(dayOfYear);
+
+    if (dayOfYear > 400) {
+      dayOfYear = dayOfYear - 500;
+    }
+
+    if (dayOfYear <= 31) {
+      birthDate.setMonth(0);
+      birthDate.setDate(dayOfYear);
+    } else if (dayOfYear <= 60) {
+      birthDate.setMonth(1);
+      birthDate.setDate(dayOfYear - 31);
+    } else if (dayOfYear <= 91) {
+      birthDate.setMonth(2);
+      birthDate.setDate(dayOfYear - 60);
+    }
+    else if (dayOfYear <= 121) {
+      birthDate.setMonth(3);
+      birthDate.setDate(dayOfYear - 91);
+    }
+    else if (dayOfYear <= 152) {
+      birthDate.setMonth(4);
+      birthDate.setDate(dayOfYear - 121);
+    }
+    else if (dayOfYear <= 182) {
+      birthDate.setMonth(5);
+      birthDate.setDate(dayOfYear - 152);
+    }
+    else if (dayOfYear <= 213) {
+      birthDate.setMonth(6);
+      birthDate.setDate(dayOfYear - 182);
+    }
+    else if (dayOfYear <= 244) {
+      birthDate.setMonth(7);
+      birthDate.setDate(dayOfYear - 213);
+    }
+    else if (dayOfYear <= 274) {
+      birthDate.setMonth(8);
+      birthDate.setDate(dayOfYear - 244);
+    }
+    else if (dayOfYear <= 305) {
+      birthDate.setMonth(9);
+      birthDate.setDate(dayOfYear - 274);
+    }
+    else if (dayOfYear <= 335) {
+      birthDate.setMonth(10);
+      birthDate.setDate(dayOfYear - 305);
+    }
+    else if (dayOfYear <= 366) {
+      birthDate.setMonth(11);
+      birthDate.setDate(dayOfYear - 335);
+    }
   
     // Format as YYYY-MM-DD
     return birthDate.toISOString().slice(0, 10);
