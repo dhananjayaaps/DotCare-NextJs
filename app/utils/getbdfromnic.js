@@ -36,6 +36,7 @@ export function getBirthdayFromNIC(nic) {
     if (dayOfYear > 400) {
       dayOfYear = dayOfYear - 500;
     }
+    dayOfYear += 1;
 
     if (dayOfYear <= 31) {
       birthDate.setMonth(0);
