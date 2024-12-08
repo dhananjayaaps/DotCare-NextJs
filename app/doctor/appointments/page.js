@@ -6,6 +6,7 @@ import NavBar from '@/app/components/NavBar';
 import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/react';
 import { getBirthdayFromNIC } from "../../utils/getbdfromnic";
+import ChatPopup from '../../utils/chatpopup';
 
 // Mother Component
 export default function Mother() {
@@ -37,6 +38,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   const [selectedReferralId, setSelectedReferralId] = useState('');
   const [addRFWindow, setAddRFWindow] = useState(false);
   const [userNic, setUserNic] = useState(null);
+  const [showBotPopUp, setShowBotPopUp] = useState(false);
 
   // Pagination and Search States
   const [currentPage, setCurrentPage] = useState(1);
@@ -108,6 +110,11 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     setSelectedReferralId(id);
     setShowRiskFactorsDialog(true);
     fetchRiskFactors(id);
+  };
+
+  const handleChatButton = (nic) => {
+    setUserNic(nic); 
+    setShowBotPopUp(true);
   };
 
   // Handle Add Risk Factors Button Click
@@ -217,10 +224,16 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                         Add New
                       </button>
                       <button
-                        className="bg-green-500 text-white px-3 py-1 rounded"
+                        className="bg-green-500 text-white px-3 py-1 rounded mr-2 mb-2 md:mb-0"
                         onClick={() => handleShowButton(appointment.id)}
                       >
                         Show
+                      </button>
+                      <button
+                        className="bg-green-500 text-white px-3 py-1 rounded"
+                        onClick={() => handleChatButton(appointment.motherNic)}
+                      >
+                        AI Chat
                       </button>
                     </td>
                   </tr>
@@ -398,6 +411,13 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
             </div>
           </div>
         </div>
+      )}
+
+      {showBotPopUp && (
+        <ChatPopup 
+          nic={userNic} 
+          setShowBotPopUp={setShowBotPopUp} 
+        />
       )}
     </div>
   );

@@ -5,6 +5,7 @@ import NavBar from '@/app/components/NavBar';
 import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/react';
 import { getBirthdayFromNIC } from "../../utils/getbdfromnic";
+import ChatPopup from '../../utils/chatpopup';
 
 export default function Mother() {
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -35,6 +36,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   const [addRFwindow, setAddRFwindow] = useState(false);
   const [userNic, setUserNic] = useState(null);
   const [error, setError] = useState(false); // To handle fetch errors
+  const [showBotPopUp, setShowBotPopUp] = useState(false);
 
   const handleShowButton = (id) => {
     setSelectedRefferelId(id);
@@ -51,6 +53,11 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
     setShowRiskFactorsDialog(false);
     setRiskFactors([]);
     setMotherDetails(null); // Reset mother's details on close
+  };
+
+  const handleChatButton = (nic) => {
+    setUserNic(nic); 
+    setShowBotPopUp(true);
   };
 
   const fetchRiskFactors = async (id) => {
@@ -186,8 +193,14 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                   <button className="bg-yellow-500 text-white px-3 py-1 rounded mr-5 w-15" onClick={() => handleAddRFButton(appointment.motherNic)}>
                     Add New
                   </button>
-                  <button className="bg-green-500 text-white px-3 py-1 rounded w-15" onClick={() => handleShowButton(appointment.motherNic)}>
+                  <button className="bg-green-500 text-white px-3 py-1 rounded w-15 mr-5" onClick={() => handleShowButton(appointment.motherNic)}>
                     Show
+                  </button>
+                  <button
+                        className="bg-green-500 text-white px-3 py-1 rounded"
+                        onClick={() => handleChatButton(appointment.motherNic)}
+                      >
+                        AI Chat
                   </button>
                 </td>
               </tr>
@@ -308,6 +321,13 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
             </div>
           </div>
         </div>
+      )}
+
+      {showBotPopUp && (
+        <ChatPopup 
+          nic={userNic} 
+          setShowBotPopUp={setShowBotPopUp} 
+        />
       )}
     </div>
   );

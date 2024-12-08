@@ -367,7 +367,7 @@ export default function RegForm() {
             {step === 3 && (
               <>
               <div className="mb-4">
-                <label className="block text-gray-700 capitalize">Select Doctor</label>
+                <label className="block text-gray-700 capitalize">Select MOH</label>
                 <select
                   name="doctor"
                   value={selectedDoctor.doctorId}
@@ -375,7 +375,7 @@ export default function RegForm() {
                   className="border border-gray-300 p-2 rounded w-full"
                   required
                 >
-                  <option value="">Select a Doctor</option>
+                  <option value="">Select a MOH</option>
                   {doctors.map((doctor) => (
                     <option key={doctor.doctorId} value={doctor.doctorUsername}>
                       {doctor.doctorName}

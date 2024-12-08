@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/react';
 import AddAppointmentDialog from './AddAppointmentDialog';
 import { getBirthdayFromNIC } from "../../utils/getbdfromnic";
+import ChatPopup from '../../utils/chatpopup';
 
 // Mother Component
 export default function Mother() {
@@ -44,6 +45,7 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
   const appointmentsPerPage = 8; // Number of appointments per page
   const [searchTerm, setSearchTerm] = useState('');
   const [searchDate, setSearchDate] = useState('');
+  const [showBotPopUp, setShowBotPopUp] = useState(false);
 
   // Fetch Appointments on Component Mount
   useEffect(() => {
@@ -102,6 +104,12 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
       setRiskLoading(false);
     }
   };
+
+  const handleChatButton = (nic) => {
+    setUserNic(nic); 
+    setShowBotPopUp(true);
+  };
+  
 
   // Handle Show Risk Factors Button Click
   const handleShowButton = (id) => {
@@ -217,10 +225,16 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
                         Add New
                       </button>
                       <button
-                        className="bg-green-500 text-white px-3 py-1 rounded"
+                        className="bg-green-500 text-white px-3 py-1 rounded mr-2 mb-2"
                         onClick={() => handleShowButton(appointment.id)}
                       >
                         Show
+                      </button>
+                      <button
+                        className="bg-green-500 text-white px-3 py-1 rounded"
+                        onClick={() => handleChatButton(appointment.motherNic)}
+                      >
+                        AI Chat
                       </button>
                     </td>
                   </tr>
@@ -398,6 +412,12 @@ const Table = ({ setShowAddDialog, showAddDialog }) => {
             </div>
           </div>
         </div>
+      )}
+      {showBotPopUp && (
+        <ChatPopup 
+          nic={userNic} 
+          setShowBotPopUp={setShowBotPopUp} 
+        />
       )}
     </div>
   );
