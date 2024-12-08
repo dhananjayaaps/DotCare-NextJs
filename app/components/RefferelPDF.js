@@ -1,9 +1,6 @@
 import jsPDF from 'jspdf';
 
 const PdfGenerator = ({ data, isAntenatal }) => {
-
-  console.log(data);
-
   const handleGeneratePdf = () => {
     const doc = new jsPDF();
 
@@ -41,17 +38,25 @@ const PdfGenerator = ({ data, isAntenatal }) => {
       { label: 'Channel Date', value: data.channelDate },
     ];
 
-    // Add data as rows in the PDF
     let yOffset = 40;
+    const maxWidth = 170;
     doc.setFontSize(12);
 
     referralData.forEach((item) => {
-      doc.text(`${item.label}: ${item.value}`, 20, yOffset);
-      yOffset += 10;
+      const lines = doc.splitTextToSize(`${item.label}: ${item.value}`, maxWidth);
+      lines.forEach((line, index) => {
+        doc.text(line, 20, yOffset + index * 10);
+      });
+      yOffset += lines.length * 10;
+
+      if (yOffset > 280) {
+        doc.addPage();
+        yOffset = 20;
+      }
     });
 
-    // Save the PDF
-    doc.save('doctor-referral.pdf');
+    const fileName = `${new Date().toISOString().split('T')[0]}_${data.nic}.pdf`;
+    doc.save(fileName);
   };
 
   return (
