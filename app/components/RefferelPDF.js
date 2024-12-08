@@ -14,7 +14,6 @@ const PdfGenerator = ({ data, isAntenatal }) => {
       referralData = [
         { label: 'Expected Date of Delivery', value: data.expectedDateOfDelivery },
         { label: 'Period of Gestational (POG)', value: data.pog },
-        { label: 'Risk Factors', value: data.riskFactors.join(', ') },
       ];
     } else {
       referralData = [
@@ -33,6 +32,7 @@ const PdfGenerator = ({ data, isAntenatal }) => {
       { label: 'Parity - Gravidity', value: data.parityGravidity ? 'Yes' : 'No' },
       { label: 'Parity - Parity', value: data.parityParity ? 'Yes' : 'No' },
       { label: 'Parity - Children', value: data.parityChildren ? 'Yes' : 'No' },
+      { label: 'Risk Factors', value: data.riskFactors.join(', ') },
       { label: 'Reason for Request', value: data.reason_for_request },
       { label: 'Doctor Name', value: data.doctorName },
       { label: 'Channel Date', value: data.channelDate },
