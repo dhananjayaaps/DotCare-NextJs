@@ -185,6 +185,7 @@ export default function RegForm() {
       alert('Data submitted successfully');
       handleNextStep();
     } catch (error) {
+      alert('Error Submitting Data');
       console.error('Error Submit Data:', error);
     }
   };
